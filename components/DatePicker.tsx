@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Button, Platform, Text, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { TextInput } from 'react-native-gesture-handler';
 
 interface CalendarProps {
     name: string;
@@ -14,7 +15,9 @@ export const DatePicker = () => {
     const [selectedDateStringTulo, setSelectedDateStringTulo] = useState('');
     const [selectedDateLahto, setSelectedDateLahto] = useState(today);
     const [selectedDateStringLahto, setSelectedDateStringLahto] = useState('');
-    const [pickerState, setPickerState] = useState(<></>)
+    const [pickerState, setPickerState] = useState(<></>);
+    const [varaaja, setVaraaja] = useState('');
+    const [info, setInfo] = useState('');
 
     useEffect(() =>
         changeString(selectedDateTulo)
@@ -79,6 +82,19 @@ export const DatePicker = () => {
                     <Text>{selectedDateStringLahto}</Text>
                 </View>
             </View>
+            <TextInput
+                style={styles.input}
+                placeholder='Varaaja'
+                onChangeText={setVaraaja}
+                value={varaaja}
+            />
+            <TextInput
+                style={styles.input}
+                placeholder='Muut tiedot'
+                onChangeText={setInfo}
+                value={info}
+            />
+            <Button onPress={() => alert('varaus')} title={"Tallenna varaus"} />
             {pickerState}
         </View>
     );
@@ -86,8 +102,8 @@ export const DatePicker = () => {
 
 const styles = StyleSheet.create({
     container: {
-        width: 100,
-        height: 50,
+        padding: 12,
+        backgroundColor: 'lightblue',
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -99,11 +115,20 @@ const styles = StyleSheet.create({
         height: 50
     },
     textBox: {
+        backgroundColor: 'white',
         width: 150,
         height: 35,
         borderBottomColor: 'black',
         borderWidth: 1,
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    input: {
+        backgroundColor: 'white',
+        padding: 6,
+        margin: 6,
+        height: 40,
+        width: 230,
+        borderWidth: 1,
     }
 })
