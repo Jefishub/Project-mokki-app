@@ -3,13 +3,21 @@ import { View, Button, Platform, Text, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { TextInput } from 'react-native-gesture-handler';
 
+interface Varaus {
+    tulo: Date,
+    lahto: Date,
+    varaaja: string,
+    info: string
+}
+
 interface CalendarProps {
-    name: string;
+    save(varaus: Varaus): void,
+    cancel(): void;
 }
 
 const weekdays = ["Su", "Ma", "Ti", "Ke", "To", "Pe", "La"]
 
-export const DatePicker = () => {
+export const DatePicker = (buttonFunctions: CalendarProps) => {
     const today = new Date();
     const [selectedDateTulo, setSelectedDateTulo] = useState(today);
     const [selectedDateStringTulo, setSelectedDateStringTulo] = useState('');
@@ -94,7 +102,16 @@ export const DatePicker = () => {
                 onChangeText={setInfo}
                 value={info}
             />
-            <Button onPress={() => alert('varaus')} title={"Tallenna varaus"} />
+            <View style={styles.buttonRow}>
+                <Button onPress={() => buttonFunctions.save({
+                    tulo: selectedDateTulo,
+                    lahto: selectedDateLahto,
+                    varaaja: varaaja,
+                    info: info
+                })} title={"Tallenna varaus"} />
+                <View style={{ width: 12 }}></View>
+                <Button onPress={buttonFunctions.cancel} title={"Peruuta"} color={'grey'} />
+            </View>
             {pickerState}
         </View>
     );
@@ -102,6 +119,7 @@ export const DatePicker = () => {
 
 const styles = StyleSheet.create({
     container: {
+        borderRadius: 12,
         padding: 12,
         backgroundColor: 'lightblue',
         alignItems: 'center',
