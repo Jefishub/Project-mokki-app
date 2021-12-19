@@ -8,48 +8,54 @@ interface CalendarProps {
 
 const weekdays = ["Su", "Ma", "Ti", "Ke", "To", "Pe", "La"]
 
-export const DatePicker = ({ name }: CalendarProps) => {
+export const DatePicker = () => {
     const today = new Date();
     const [selectedDateTulo, setSelectedDateTulo] = useState(today);
     const [selectedDateStringTulo, setSelectedDateStringTulo] = useState('');
     const [selectedDateLahto, setSelectedDateLahto] = useState(today);
     const [selectedDateStringLahto, setSelectedDateStringLahto] = useState('');
-    const [showTulo, setShowTulo] = useState(false);
-    const [showLahto, setShowLahto] = useState(false);
     const [pickerState, setPickerState] = useState(<></>)
+
+    useEffect(() =>
+        changeString(selectedDateTulo)
+        , [selectedDateTulo])
+
+    useEffect(() =>
+        changeString(selectedDateLahto)
+        , [selectedDateLahto])
 
     const changeString = (typeString: Date) => {
         const weekday = weekdays[typeString.getDay()]
         typeString == selectedDateTulo
-        ? setSelectedDateStringTulo(
-            `${weekday} ${selectedDateTulo.getUTCDate()}.${selectedDateTulo.getUTCMonth() + 1}.${selectedDateTulo.getUTCFullYear()}`
-        )
-        : setSelectedDateStringLahto(
-            `${weekday} ${selectedDateLahto.getUTCDate()}.${selectedDateLahto.getUTCMonth() + 1}.${selectedDateLahto.getUTCFullYear()}`
-        )
-        ;
+            ? setSelectedDateStringTulo(
+                `${weekday} ${selectedDateTulo.getUTCDate()}.${selectedDateTulo.getUTCMonth() + 1}.${selectedDateTulo.getUTCFullYear()}`
+            )
+            : setSelectedDateStringLahto(
+                `${weekday} ${selectedDateLahto.getUTCDate()}.${selectedDateLahto.getUTCMonth() + 1}.${selectedDateLahto.getUTCFullYear()}`
+            )
+            ;
     };
 
     const onChangeTulo = (event: any, newDate: any) => {
         setSelectedDateTulo(newDate);
-        changeString(selectedDateTulo);
         setPickerState(<></>);
     };
 
     const onChangeLahto = (event: any, newDate: any) => {
-        setShowLahto(false);
         setSelectedDateLahto(newDate);
-        changeString(selectedDateLahto);
+        setPickerState(<></>);
     };
 
-    const picker = () => {
+    const picker = (isTulo: boolean) => {
         return (
             <DateTimePicker
                 testID="dateTimePicker1"
                 value={today}
                 mode={"date"}
                 onChange={(event: any, newDate: any) => {
-                    onChangeTulo(event, newDate);                   
+                    isTulo
+                        ? onChangeTulo(event, newDate)
+                        : onChangeLahto(event, newDate);
                 }}
             />
         )
@@ -59,7 +65,7 @@ export const DatePicker = ({ name }: CalendarProps) => {
         <View style={styles.container}>
             <View style={styles.buttonRow}>
                 <View style={styles.button}>
-                    <Button onPress={() => setPickerState(picker())} title={"Tulo"} />
+                    <Button onPress={() => setPickerState(picker(true))} title={"Tulo"} />
                 </View>
                 <View style={styles.textBox}>
                     <Text>{selectedDateStringTulo}</Text>
@@ -67,7 +73,7 @@ export const DatePicker = ({ name }: CalendarProps) => {
             </View>
             <View style={styles.buttonRow}>
                 <View style={styles.button}>
-                    <Button onPress={() => setShowLahto(true)} title={"Lähtö"} />
+                    <Button onPress={() => setPickerState(picker(false))} title={"Lähtö"} />
                 </View>
                 <View style={styles.textBox}>
                     <Text>{selectedDateStringLahto}</Text>
@@ -80,13 +86,12 @@ export const DatePicker = ({ name }: CalendarProps) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         width: 100,
         height: 50,
         alignItems: 'center',
+        justifyContent: 'center'
     },
     buttonRow: {
-        flex: 1,
         flexDirection: "row"
     },
     button: {
