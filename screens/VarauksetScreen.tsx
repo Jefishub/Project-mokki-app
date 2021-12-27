@@ -9,7 +9,7 @@ import { DatePicker } from '../components/DatePicker';
 import Firebase from '../utils/firebase';
 import uuid from 'react-native-uuid';
 
-interface Reserveration {
+interface Reservation {
   startDate: Date,
   endDate: Date,
   reserver: string,
@@ -37,7 +37,7 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
     })
   }, []);
 
-  const saveReservation = (reserveration: Reserveration) => {
+  const saveReservation = (reserveration: Reservation) => {
     const id = uuid.v4();
     console.log(reserveration);
     push(ref(database, 'items/'),
@@ -76,17 +76,16 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
         : <Button onPress={() => setShowReservation(true)} title={"Tee uusi reserveration"} />
       }
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <Text>{reservationList.length.toString()}</Text>
-      {/* <FlatList
+      <FlatList
         style={{ marginLeft: "5%" }}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item["id"]}
         renderItem={({ item }) => 
         <View style={styles.listcontainer}>
-          <Text style={{ fontSize: 18 }}>{item.reserver}, {item.info}</Text>
+          <Text style={{ fontSize: 18 }}>{item["reserver"]}, {item["info"]}</Text>
         </View>}
         data={reservationList}
         ItemSeparatorComponent={listSeparator}
-      /> */}
+      />
     </View>
   );
 }

@@ -3,7 +3,7 @@ import { View, Button, Platform, Text, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { TextInput } from 'react-native-gesture-handler';
 
-interface Reserveration {
+interface Reservation {
   startDate: Date,
   endDate: Date,
   reserver: string,
@@ -11,7 +11,7 @@ interface Reserveration {
 }  
 
 interface CalendarProps {
-    save(reserveration: Reserveration): void,
+    save(reserveration: Reservation): void,
     cancel(): void;
 }
 
