@@ -20,35 +20,35 @@ const weekdays = ["Su", "Ma", "Ti", "Ke", "To", "Pe", "La"]
 
 export const DatePicker = (buttonFunctions: CalendarProps) => {
     const today = new Date();
-    const [selectedDateStartDate, setSelectedDateStartDate] = useState(today);
-    const [selectedDateStringStartDate, setSelectedDateStringStartDate] = useState('');
-    const [selectedDateEndDate, setSelectedDateEndDate] = useState(today);
-    const [selectedDateStringEndDate, setSelectedDateStringEndDate] = useState('');
+    const [selectedStartDate, setSelectedStartDate] = useState(today);
+    const [selectedStartDateString, setSelectedStartDateString] = useState('');
+    const [selectedEndDate, setSelectedEndDate] = useState(today);
+    const [selectedEndDateString, setSelectedEndDateString] = useState('');
     const [pickerState, setPickerState] = useState(<></>);
     const [reserver, setReserver] = useState('');
     const [info, setInfo] = useState('');
 
     useEffect(() =>
-        changeString(selectedDateStartDate)
-        , [selectedDateStartDate])
+        changeString(selectedStartDate)
+        , [selectedStartDate])
 
     useEffect(() =>
-        changeString(selectedDateEndDate)
-        , [selectedDateEndDate])
+        changeString(selectedEndDate)
+        , [selectedEndDate])
 
     const changeString = (typeString: Date) => {
-        typeString == selectedDateStartDate
-            ? setSelectedDateStringStartDate(DateToString(typeString, selectedDateStartDate))
-            : setSelectedDateStringEndDate(DateToString(typeString, selectedDateEndDate));
+        typeString == selectedStartDate
+            ? setSelectedStartDateString(DateToString(typeString, selectedStartDate))
+            : setSelectedEndDateString(DateToString(typeString, selectedEndDate));
     };
 
     const onChangeStartDate = (event: any, newDate: any) => {
-        setSelectedDateStartDate(newDate);
+        setSelectedStartDate(newDate);
         setPickerState(<></>);
     };
 
     const onChangeEndDate = (event: any, newDate: any) => {
-        setSelectedDateEndDate(newDate);
+        setSelectedEndDate(newDate);
         setPickerState(<></>);
     };
 
@@ -74,7 +74,7 @@ export const DatePicker = (buttonFunctions: CalendarProps) => {
                     <Button onPress={() => setPickerState(picker(true))} title={"Tulo"} />
                 </View>
                 <View style={styles.textBox}>
-                    <Text>{selectedDateStringStartDate}</Text>
+                    <Text>{selectedStartDateString}</Text>
                 </View>
             </View>
             <View style={styles.buttonRow}>
@@ -82,7 +82,7 @@ export const DatePicker = (buttonFunctions: CalendarProps) => {
                     <Button onPress={() => setPickerState(picker(false))} title={"Lähtö"} />
                 </View>
                 <View style={styles.textBox}>
-                    <Text>{selectedDateStringEndDate}</Text>
+                    <Text>{selectedEndDateString}</Text>
                 </View>
             </View>
             <TextInput
@@ -99,8 +99,8 @@ export const DatePicker = (buttonFunctions: CalendarProps) => {
             />
             <View style={styles.buttonRow}>
                 <Button onPress={() => buttonFunctions.save({
-                    startDate: selectedDateStartDate,
-                    endDate: selectedDateEndDate,
+                    startDate: selectedStartDate,
+                    endDate: selectedEndDate,
                     reserver: reserver,
                     info: info
                 })} title={"Tallenna reserveration"} />
