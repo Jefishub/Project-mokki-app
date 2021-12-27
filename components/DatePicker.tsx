@@ -29,18 +29,12 @@ export const DatePicker = (buttonFunctions: CalendarProps) => {
     const [info, setInfo] = useState('');
 
     useEffect(() =>
-        changeString(selectedStartDate)
+        setSelectedStartDateString(DateToString(selectedStartDate))
         , [selectedStartDate])
 
     useEffect(() =>
-        changeString(selectedEndDate)
+        setSelectedEndDateString(DateToString(selectedEndDate))
         , [selectedEndDate])
-
-    const changeString = (typeString: Date) => {
-        typeString == selectedStartDate
-            ? setSelectedStartDateString(DateToString(typeString, selectedStartDate))
-            : setSelectedEndDateString(DateToString(typeString, selectedEndDate));
-    };
 
     const onChangeStartDate = (event: any, newDate: any) => {
         setSelectedStartDate(newDate);

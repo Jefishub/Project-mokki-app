@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Button, FlatList } from 'react-native'
+import { StyleSheet, Button, FlatList, ScrollView, Alert } from 'react-native'
 import { getDatabase, push, ref, onValue } from "firebase/database";
 
-import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 import { DatePicker } from '../components/DatePicker';
 import Firebase from '../utils/firebase';
 import uuid from 'react-native-uuid';
+import DateToString from '../utils/dateHelper';
 
 interface Reservation {
   startDate: Date,
@@ -17,6 +17,7 @@ interface Reservation {
 }
 
 interface ReservationFromFirebase {
+  id: string,
   startDate: string,
   endDate: string,
   reserver: string,
@@ -28,17 +29,12 @@ const database = getDatabase(app);
 
 export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
   const [showReservation, setShowReservation] = useState(false)
-
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [reserver, setReserver] = useState('');
-  const [info, setInfo] = useState('');
   const [reservationList, setReservationList] = useState([]);
 
   useEffect(() => {
     const itemsRef = ref(database, 'items/');
     onValue(itemsRef, (snapshot) => {
-      console.log('test');
+      console.log('updated');
       const data = snapshot.val();
       setReservationList(Object.values(data));
     })
@@ -78,10 +74,16 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
   const listView = (item: ReservationFromFirebase) => {
     const startDate = new Date(Date.parse(item.startDate));
     const endDate = new Date(Date.parse(item.endDate));
-    console.log(startDate);
     return (
       <View style={styles.listcontainer}>
-        <Text style={{ fontSize: 18 }}>{item.reserver}, {item.info}</Text>
+        <ScrollView
+          horizontal={true}
+        >
+          <Text style={{ fontSize: 18, backgroundColor: '#afffff', width: 70 }}>{item.reserver}</Text>
+          <Text style={{ fontSize: 18, backgroundColor: '#aaafff', width: 125 }}>{DateToString(startDate)}</Text>
+          <Text style={{ fontSize: 18, backgroundColor: '#ffffaa', width: 125 }}>{DateToString(endDate)}</Text>
+          <Button onPress={() => Alert.alert('Muut tiedot:', item.info)} title={'info'} />
+        </ScrollView>
       </View>
     )
   }
@@ -91,16 +93,18 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
       <Text style={styles.title}>Mökkivaraukset</Text>
       {showReservation
         ? <DatePicker cancel={cancelReservation} save={(reserveration) => saveReservation(reserveration)} />
-        : <Button onPress={() => setShowReservation(true)} title={"Tee uusi reserveration"} />
+        : <Button onPress={() => setShowReservation(true)} title={"Tee uusi varaus"} />
       }
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+
       <FlatList
-        style={{ marginLeft: "5%" }}
+        style={{ marginLeft: "5%", marginRight: "5%" }}
         keyExtractor={item => item["id"]}
         renderItem={({ item }) => listView(item)}
         data={reservationList}
         ItemSeparatorComponent={listSeparator}
       />
+
     </View>
   );
 }
