@@ -3,15 +3,15 @@ import { View, Button, Platform, Text, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { TextInput } from 'react-native-gesture-handler';
 
-interface Varaus {
-    tulo: Date,
-    lahto: Date,
-    varaaja: string,
-    info: string
-}
+interface Reserveration {
+  startDate: Date,
+  endDate: Date,
+  reserver: string,
+  info: string
+}  
 
 interface CalendarProps {
-    save(varaus: Varaus): void,
+    save(reserveration: Reserveration): void,
     cancel(): void;
 }
 
@@ -19,54 +19,54 @@ const weekdays = ["Su", "Ma", "Ti", "Ke", "To", "Pe", "La"]
 
 export const DatePicker = (buttonFunctions: CalendarProps) => {
     const today = new Date();
-    const [selectedDateTulo, setSelectedDateTulo] = useState(today);
-    const [selectedDateStringTulo, setSelectedDateStringTulo] = useState('');
-    const [selectedDateLahto, setSelectedDateLahto] = useState(today);
-    const [selectedDateStringLahto, setSelectedDateStringLahto] = useState('');
+    const [selectedDateStartDate, setSelectedDateStartDate] = useState(today);
+    const [selectedDateStringStartDate, setSelectedDateStringStartDate] = useState('');
+    const [selectedDateEndDate, setSelectedDateEndDate] = useState(today);
+    const [selectedDateStringEndDate, setSelectedDateStringEndDate] = useState('');
     const [pickerState, setPickerState] = useState(<></>);
-    const [varaaja, setVaraaja] = useState('');
+    const [reserver, setReserver] = useState('');
     const [info, setInfo] = useState('');
 
     useEffect(() =>
-        changeString(selectedDateTulo)
-        , [selectedDateTulo])
+        changeString(selectedDateStartDate)
+        , [selectedDateStartDate])
 
     useEffect(() =>
-        changeString(selectedDateLahto)
-        , [selectedDateLahto])
+        changeString(selectedDateEndDate)
+        , [selectedDateEndDate])
 
     const changeString = (typeString: Date) => {
         const weekday = weekdays[typeString.getDay()]
-        typeString == selectedDateTulo
-            ? setSelectedDateStringTulo(
-                `${weekday} ${selectedDateTulo.getUTCDate()}.${selectedDateTulo.getUTCMonth() + 1}.${selectedDateTulo.getUTCFullYear()}`
+        typeString == selectedDateStartDate
+            ? setSelectedDateStringStartDate(
+                `${weekday} ${selectedDateStartDate.getUTCDate()}.${selectedDateStartDate.getUTCMonth() + 1}.${selectedDateStartDate.getUTCFullYear()}`
             )
-            : setSelectedDateStringLahto(
-                `${weekday} ${selectedDateLahto.getUTCDate()}.${selectedDateLahto.getUTCMonth() + 1}.${selectedDateLahto.getUTCFullYear()}`
+            : setSelectedDateStringEndDate(
+                `${weekday} ${selectedDateEndDate.getUTCDate()}.${selectedDateEndDate.getUTCMonth() + 1}.${selectedDateEndDate.getUTCFullYear()}`
             )
             ;
     };
 
-    const onChangeTulo = (event: any, newDate: any) => {
-        setSelectedDateTulo(newDate);
+    const onChangeStartDate = (event: any, newDate: any) => {
+        setSelectedDateStartDate(newDate);
         setPickerState(<></>);
     };
 
-    const onChangeLahto = (event: any, newDate: any) => {
-        setSelectedDateLahto(newDate);
+    const onChangeEndDate = (event: any, newDate: any) => {
+        setSelectedDateEndDate(newDate);
         setPickerState(<></>);
     };
 
-    const picker = (isTulo: boolean) => {
+    const picker = (isStartDate: boolean) => {
         return (
             <DateTimePicker
                 testID="dateTimePicker1"
                 value={today}
                 mode={"date"}
                 onChange={(event: any, newDate: any) => {
-                    isTulo
-                        ? onChangeTulo(event, newDate)
-                        : onChangeLahto(event, newDate);
+                    isStartDate
+                        ? onChangeStartDate(event, newDate)
+                        : onChangeEndDate(event, newDate);
                 }}
             />
         )
@@ -79,7 +79,7 @@ export const DatePicker = (buttonFunctions: CalendarProps) => {
                     <Button onPress={() => setPickerState(picker(true))} title={"Tulo"} />
                 </View>
                 <View style={styles.textBox}>
-                    <Text>{selectedDateStringTulo}</Text>
+                    <Text>{selectedDateStringStartDate}</Text>
                 </View>
             </View>
             <View style={styles.buttonRow}>
@@ -87,14 +87,14 @@ export const DatePicker = (buttonFunctions: CalendarProps) => {
                     <Button onPress={() => setPickerState(picker(false))} title={"Lähtö"} />
                 </View>
                 <View style={styles.textBox}>
-                    <Text>{selectedDateStringLahto}</Text>
+                    <Text>{selectedDateStringEndDate}</Text>
                 </View>
             </View>
             <TextInput
                 style={styles.input}
-                placeholder='Varaaja'
-                onChangeText={setVaraaja}
-                value={varaaja}
+                placeholder='Reserver'
+                onChangeText={setReserver}
+                value={reserver}
             />
             <TextInput
                 style={styles.input}
@@ -104,11 +104,11 @@ export const DatePicker = (buttonFunctions: CalendarProps) => {
             />
             <View style={styles.buttonRow}>
                 <Button onPress={() => buttonFunctions.save({
-                    tulo: selectedDateTulo,
-                    lahto: selectedDateLahto,
-                    varaaja: varaaja,
+                    startDate: selectedDateStartDate,
+                    endDate: selectedDateEndDate,
+                    reserver: reserver,
                     info: info
-                })} title={"Tallenna varaus"} />
+                })} title={"Tallenna reserveration"} />
                 <View style={{ width: 12 }}></View>
                 <Button onPress={buttonFunctions.cancel} title={"Peruuta"} color={'grey'} />
             </View>
