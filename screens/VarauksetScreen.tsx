@@ -16,6 +16,13 @@ interface Reservation {
   info: string
 }
 
+interface ReservationFromFirebase {
+  startDate: string,
+  endDate: string,
+  reserver: string,
+  info: string
+}
+
 const app = Firebase();
 const database = getDatabase(app);
 
@@ -48,7 +55,7 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
         'reserver': reserveration.reserver,
         'info': reserveration.info
       });
-      setShowReservation(false)
+    setShowReservation(false)
   }
 
   const cancelReservation = () => {
@@ -68,6 +75,17 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
     );
   };
 
+  const listView = (item: ReservationFromFirebase) => {
+    const startDate = new Date(Date.parse(item.startDate));
+    const endDate = new Date(Date.parse(item.endDate));
+    console.log(startDate);
+    return (
+      <View style={styles.listcontainer}>
+        <Text style={{ fontSize: 18 }}>{item.reserver}, {item.info}</Text>
+      </View>
+    )
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Mökkivaraukset</Text>
@@ -79,10 +97,7 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
       <FlatList
         style={{ marginLeft: "5%" }}
         keyExtractor={item => item["id"]}
-        renderItem={({ item }) => 
-        <View style={styles.listcontainer}>
-          <Text style={{ fontSize: 18 }}>{item["reserver"]}, {item["info"]}</Text>
-        </View>}
+        renderItem={({ item }) => listView(item)}
         data={reservationList}
         ItemSeparatorComponent={listSeparator}
       />

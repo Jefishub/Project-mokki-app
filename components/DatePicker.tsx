@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { View, Button, Platform, Text, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { TextInput } from 'react-native-gesture-handler';
+import DateToString from '../utils/dateHelper';
 
 interface Reservation {
-  startDate: Date,
-  endDate: Date,
-  reserver: string,
-  info: string
-}  
+    startDate: Date,
+    endDate: Date,
+    reserver: string,
+    info: string
+}
 
 interface CalendarProps {
     save(reserveration: Reservation): void,
@@ -36,15 +37,9 @@ export const DatePicker = (buttonFunctions: CalendarProps) => {
         , [selectedDateEndDate])
 
     const changeString = (typeString: Date) => {
-        const weekday = weekdays[typeString.getDay()]
         typeString == selectedDateStartDate
-            ? setSelectedDateStringStartDate(
-                `${weekday} ${selectedDateStartDate.getUTCDate()}.${selectedDateStartDate.getUTCMonth() + 1}.${selectedDateStartDate.getUTCFullYear()}`
-            )
-            : setSelectedDateStringEndDate(
-                `${weekday} ${selectedDateEndDate.getUTCDate()}.${selectedDateEndDate.getUTCMonth() + 1}.${selectedDateEndDate.getUTCFullYear()}`
-            )
-            ;
+            ? setSelectedDateStringStartDate(DateToString(typeString, selectedDateStartDate))
+            : setSelectedDateStringEndDate(DateToString(typeString, selectedDateEndDate));
     };
 
     const onChangeStartDate = (event: any, newDate: any) => {
@@ -92,7 +87,7 @@ export const DatePicker = (buttonFunctions: CalendarProps) => {
             </View>
             <TextInput
                 style={styles.input}
-                placeholder='Reserver'
+                placeholder='Varaaja'
                 onChangeText={setReserver}
                 value={reserver}
             />
