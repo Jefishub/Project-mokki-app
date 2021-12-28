@@ -83,26 +83,28 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
     const endDate = new Date(Date.parse(item.endDate));
     return (
       <View style={styles.listcontainer}>
-        <ScrollView
-          horizontal={true}
-        >
+        <ScrollView horizontal={true} >
           <Text style={{ fontSize: 18, backgroundColor: '#afffff', width: 70 }}>{item.reserver}</Text>
           <Text style={{ fontSize: 18, backgroundColor: '#aaafff', width: 125 }}>{DateToString(startDate)}</Text>
           <Text style={{ fontSize: 18, backgroundColor: '#ffffaa', width: 125 }}>{DateToString(endDate)}</Text>
           {editMode
-            ? <Button onPress={() =>
-              Alert.alert(
-                'Poista tämä varaus:',
-                'Oletko varma, että haluat poistaa varauksen ?',
-                [
-                  {
-                    text: "peruuta",
-                    onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel"
-                  },
-                  { text: "Poista", onPress: () => removeReservation() }
-                ]
-              )} title={'DEL'} color={'red'} />
+            ? <Button
+              onPress={() =>
+                Alert.alert(
+                  'Poista tämä varaus:',
+                  'Oletko varma, että haluat poistaa varauksen ?',
+                  [
+                    {
+                      text: "peruuta",
+                      onPress: () => console.log("Cancel Pressed"),
+                      style: "cancel"
+                    },
+                    { text: "Poista", onPress: () => removeReservation() }
+                  ]
+                )}
+              title={'DEL'}
+              color={'red'}
+            />
             : <Button onPress={() => Alert.alert('Muut tiedot:', item.info)} title={'info'} />
           }
         </ScrollView>
@@ -127,7 +129,7 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
         ItemSeparatorComponent={listSeparator}
       />
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <View style={{marginBottom: 30}}>
+      <View style={{ marginBottom: 30 }}>
         <Button onPress={
           () => setEditMode(!editMode)}
           title={editMode ? "Poistu muokkausmoodista" : "Muokkaa varauksia"}
