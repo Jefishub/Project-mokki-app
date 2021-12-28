@@ -8,6 +8,7 @@ import { DatePicker } from '../components/DatePicker';
 import Firebase from '../utils/firebase';
 import uuid from 'react-native-uuid';
 import DateToString from '../utils/dateHelper';
+import { color } from 'react-native-reanimated';
 
 interface Reservation {
   startDate: Date,
@@ -30,6 +31,7 @@ const database = getDatabase(app);
 export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
   const [showReservation, setShowReservation] = useState(false)
   const [reservationList, setReservationList] = useState([]);
+  const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
     const itemsRef = ref(database, 'items/');
@@ -58,6 +60,11 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
     setShowReservation(false)
   }
 
+  const removeReservation = () => {
+    // TODO
+    console.log("removed")
+  }
+
   const listSeparator = () => {
     return (
       <View
@@ -82,7 +89,22 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
           <Text style={{ fontSize: 18, backgroundColor: '#afffff', width: 70 }}>{item.reserver}</Text>
           <Text style={{ fontSize: 18, backgroundColor: '#aaafff', width: 125 }}>{DateToString(startDate)}</Text>
           <Text style={{ fontSize: 18, backgroundColor: '#ffffaa', width: 125 }}>{DateToString(endDate)}</Text>
-          <Button onPress={() => Alert.alert('Muut tiedot:', item.info)} title={'info'} />
+          {editMode
+            ? <Button onPress={() =>
+              Alert.alert(
+                'Poista tämä varaus:',
+                'Oletko varma, että haluat poistaa varauksen ?',
+                [
+                  {
+                    text: "peruuta",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel"
+                  },
+                  { text: "Poista", onPress: () => removeReservation() }
+                ]
+              )} title={'DEL'} color={'red'} />
+            : <Button onPress={() => Alert.alert('Muut tiedot:', item.info)} title={'info'} />
+          }
         </ScrollView>
       </View>
     )
@@ -104,7 +126,13 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
         data={reservationList}
         ItemSeparatorComponent={listSeparator}
       />
-
+      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+      <View style={{marginBottom: 30}}>
+        <Button onPress={
+          () => setEditMode(!editMode)}
+          title={editMode ? "Poistu muokkausmoodista" : "Muokkaa varauksia"}
+        />
+      </View>
     </View>
   );
 }
