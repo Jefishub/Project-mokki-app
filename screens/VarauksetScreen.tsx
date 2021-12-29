@@ -8,7 +8,6 @@ import { DatePicker } from '../components/DatePicker';
 import Firebase from '../utils/firebase';
 import uuid from 'react-native-uuid';
 import DateToString from '../utils/dateHelper';
-import { color } from 'react-native-reanimated';
 
 interface Reservation {
   startDate: Date,
@@ -33,10 +32,9 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
   const [reservationList, setReservationList] = useState([]);
   const [editMode, setEditMode] = useState(false);
 
-  useEffect(() => {
+  useEffect(() => { 
     const itemsRef = ref(database, 'items/');
     onValue(itemsRef, (snapshot) => {
-      console.log('updated');
       const data = snapshot.val();
       setReservationList(Object.values(data));
     })
@@ -62,7 +60,7 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
 
   const removeReservation = () => {
     // TODO
-    console.log("removed")
+    console.log("removed");
   }
 
   const listSeparator = () => {
