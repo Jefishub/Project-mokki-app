@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Button, FlatList, ScrollView, Alert } from 'react-native'
+import { StyleSheet, Button, FlatList, ScrollView, Alert, Dimensions } from 'react-native'
 import { getDatabase, push, ref, onValue } from "firebase/database";
 
 import { Text, View } from '../components/Themed';
@@ -8,6 +8,7 @@ import { DatePicker } from '../components/DatePicker';
 import Firebase from '../utils/firebase';
 import uuid from 'react-native-uuid';
 import DateToString from '../utils/dateHelper';
+import FontAwesome from '@expo/vector-icons/build/FontAwesome';
 
 interface Reservation {
   startDate: Date,
@@ -81,31 +82,39 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
     const endDate = new Date(Date.parse(item.endDate));
     return (
       <View style={styles.listcontainer}>
-        <ScrollView horizontal={true} >
-          <Text style={{ fontSize: 18, backgroundColor: '#afffff', width: 70 }}>{item.reserver}</Text>
-          <Text style={{ fontSize: 18, backgroundColor: '#aaafff', width: 125 }}>{DateToString(startDate)}</Text>
-          <Text style={{ fontSize: 18, backgroundColor: '#ffffaa', width: 125 }}>{DateToString(endDate)}</Text>
-          {editMode
-            ? <Button
-              onPress={() =>
-                Alert.alert(
-                  'Poista tämä varaus:',
-                  'Oletko varma, että haluat poistaa varauksen ?',
-                  [
-                    {
-                      text: "peruuta",
-                      onPress: () => console.log("Cancel Pressed"),
-                      style: "cancel"
-                    },
-                    { text: "Poista", onPress: () => removeReservation() }
-                  ]
-                )}
-              title={'DEL'}
-              color={'red'}
-            />
-            : <Button onPress={() => Alert.alert('Muut tiedot:', item.info)} title={'info'} />
-          }
-        </ScrollView>
+          <Text style={{ fontSize: 18, backgroundColor: '#afffff', flex: 3 }}>{item.reserver}</Text>
+          <Text style={{ fontSize: 18, backgroundColor: '#aaafff', flex: 5 }}>{DateToString(startDate)}</Text>
+          <Text style={{ fontSize: 18, backgroundColor: '#ffffaa', flex: 5 }}>{DateToString(endDate)}</Text>
+          <View style={{ flex: 2, alignItems: 'center' }}>
+            {editMode
+              ? <FontAwesome
+                onPress={() =>
+                  Alert.alert(
+                    'Poista tämä varaus:',
+                    'Oletko varma, että haluat poistaa varauksen ?',
+                    [
+                      {
+                        text: "peruuta",
+                        onPress: () => console.log("Cancel Pressed"),
+                        style: "cancel"
+                      },
+                      { text: "Poista", onPress: () => removeReservation() }
+                    ]
+                  )}
+                name="trash"
+                size={25}
+                color={'red'}
+                style={{ marginRight: 15 }}
+              />
+              : <FontAwesome
+                onPress={() => Alert.alert('Muut tiedot:', item.info)}
+                name="info-circle"
+                size={25}
+                color={'teal'}
+                style={{ marginRight: 15 }}
+              />
+            }
+          </View>
       </View>
     )
   }
@@ -144,6 +153,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   listcontainer: {
+    paddingRight: '5%',
+    width: Dimensions.get('window').width,
     flexDirection: 'row',
     backgroundColor: '#fff',
     alignItems: 'center'

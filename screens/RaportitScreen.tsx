@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Button, FlatList, ScrollView, Alert } from 'react-native'
+import { StyleSheet, Button, FlatList, ScrollView, Alert, Dimensions } from 'react-native'
 import { getDatabase, push, ref, onValue } from "firebase/database";
 
 import { Text, View } from '../components/Themed';
@@ -8,6 +8,7 @@ import Firebase from '../utils/firebase';
 import uuid from 'react-native-uuid';
 import DateToString from '../utils/dateHelper';
 import { ReportSheet } from '../components/Reports';
+import FontAwesome from '@expo/vector-icons/build/FontAwesome';
 
 interface Report {
   startDate: Date,
@@ -97,9 +98,9 @@ export default function RaportitScreen({ navigation }: RootTabScreenProps<'TabOn
           <Text style={{ fontSize: 18, backgroundColor: '#afffff', flex: 3 }}>{item.reserver}</Text>
           <Text style={{ fontSize: 18, backgroundColor: '#aaafff', flex: 5 }}>{DateToString(startDate)}</Text>
           <Text style={{ fontSize: 18, backgroundColor: '#ffffaa', flex: 5 }}>{DateToString(endDate)}</Text>
-          <View style={{flex: 2}}>
+          <View style={{ flex: 2, alignItems: 'center' }}>
             {editMode
-              ? <Button
+              ? <FontAwesome
                 onPress={() =>
                   Alert.alert(
                     'Poista tämä varaus:',
@@ -113,24 +114,34 @@ export default function RaportitScreen({ navigation }: RootTabScreenProps<'TabOn
                       { text: "Poista", onPress: () => removeReport() }
                     ]
                   )}
-                title={'DEL'}
+                name="trash"
+                size={25}
                 color={'red'}
+                style={{ marginRight: 15 }}
               />
-              : <Button onPress={() => Alert.alert('Muut tiedot:', item.info)} title={'info'} />
+              : <FontAwesome
+                onPress={() => Alert.alert('Muut tiedot:', item.info)}
+                name="info-circle"
+                size={25}
+                color={'teal'}
+                style={{ marginRight: 15 }}
+              />
             }
           </View>
         </View>
+        <View style={styles.separatorItem} />
         <View style={styles.infoRow}>
-          <Text style={{ fontSize: 18, backgroundColor: '#afffff', width: 70 }}>Sähkö:</Text>
-          <Text style={{ fontSize: 18, backgroundColor: '#afffff', width: 100 }}>{item.electricityArrive}</Text>
-          <Text style={{ fontSize: 18, backgroundColor: '#afffff', width: 100 }}>{item.electricityLeave}</Text>
-          <Text style={{ fontSize: 18, backgroundColor: '#afffff', width: 100 }}>{Number(item.electricityLeave) - Number(item.electricityArrive)}</Text>
+          <Text style={{ fontSize: 18, backgroundColor: '#afffff', flex: 3 }}>Sähkö:</Text>
+          <Text style={{ fontSize: 18, backgroundColor: '#afffff', flex: 5 }}>{item.electricityArrive}</Text>
+          <Text style={{ fontSize: 18, backgroundColor: '#afffff', flex: 5 }}>{item.electricityLeave}</Text>
+          <Text style={{ fontSize: 18, backgroundColor: '#afffff', flex: 3 }}>{Number(item.electricityLeave) - Number(item.electricityArrive)}</Text>
         </View>
+        <View style={styles.separatorItem} />
         <View style={styles.infoRow}>
-          <Text style={{ fontSize: 18, backgroundColor: '#afffff', width: 70 }}>Vesi:</Text>
-          <Text style={{ fontSize: 18, backgroundColor: '#afffff', width: 100 }}>{Number(item.waterArrive).toFixed(3)}</Text>
-          <Text style={{ fontSize: 18, backgroundColor: '#afffff', width: 100 }}>{Number(item.waterLeave).toFixed(3)}</Text>
-          <Text style={{ fontSize: 18, backgroundColor: '#afffff', width: 100 }}>{(Number(item.waterLeave) - Number(item.waterArrive)).toFixed(3)}</Text>
+          <Text style={{ fontSize: 18, backgroundColor: '#afffff', flex: 3 }}>Vesi:</Text>
+          <Text style={{ fontSize: 18, backgroundColor: '#afffff', flex: 5 }}>{Number(item.waterArrive).toFixed(3)}</Text>
+          <Text style={{ fontSize: 18, backgroundColor: '#afffff', flex: 5 }}>{Number(item.waterLeave).toFixed(3)}</Text>
+          <Text style={{ fontSize: 18, backgroundColor: '#afffff', flex: 3 }}>{(Number(item.waterLeave) - Number(item.waterArrive)).toFixed(3)}</Text>
         </View>
       </View>
     )
@@ -170,11 +181,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   containerReport: {
+    paddingRight: '5%',
+    width: Dimensions.get('window').width,
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    borderColor: 'black',
-    borderWidth: 1,
   },
   listcontainer: {
     flexDirection: 'column',
@@ -191,7 +202,13 @@ const styles = StyleSheet.create({
     height: 1,
     width: '80%',
   },
+  separatorItem: {
+    height: 1,
+    width: '100%',
+    backgroundColor: 'black'
+  },
   infoRow: {
-    flexDirection: "row"
+    flexDirection: "row",
+    width: '100%'
   },
 });
