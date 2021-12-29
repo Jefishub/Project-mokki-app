@@ -33,7 +33,7 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
   const [editMode, setEditMode] = useState(false);
 
   useEffect(() => { 
-    const itemsRef = ref(database, 'items/');
+    const itemsRef = ref(database, 'reservations/');
     onValue(itemsRef, (snapshot) => {
       const data = snapshot.val();
       setReservationList(Object.values(data));
@@ -43,7 +43,7 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
   const saveReservation = (reserveration: Reservation) => {
     const id = uuid.v4();
     console.log(reserveration);
-    push(ref(database, 'items/'),
+    push(ref(database, 'reservations/'),
       {
         'id': id,
         'startDate': reserveration.startDate.toString(),
