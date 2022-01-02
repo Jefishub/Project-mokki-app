@@ -16,8 +16,6 @@ interface CalendarProps {
     cancel(): void;
 }
 
-const weekdays = ["Su", "Ma", "Ti", "Ke", "To", "Pe", "La"]
-
 export const DatePicker = (buttonFunctions: CalendarProps) => {
     const today = new Date();
     const [selectedStartDate, setSelectedStartDate] = useState(today);

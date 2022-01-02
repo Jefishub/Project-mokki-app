@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Button, FlatList, ScrollView, Alert, Dimensions } from 'react-native'
-import { getDatabase, push, ref, onValue } from "firebase/database";
-
+import { getDatabase, push, ref, onValue, update, set, remove } from "firebase/database";
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 import { DatePicker } from '../components/DatePicker';
@@ -25,8 +24,7 @@ interface ReservationFromFirebase {
   info: string
 }
 
-const app = Firebase();
-const database = getDatabase(app);
+const db = getDatabase(Firebase);
 
 export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
   const [showReservation, setShowReservation] = useState(false)
@@ -34,17 +32,22 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
   const [editMode, setEditMode] = useState(false);
 
   useEffect(() => { 
-    const itemsRef = ref(database, 'reservations/');
+    getData()
+  }, []);
+
+  const getData = () => {
+    const itemsRef = ref(db, 'reservations/');
     onValue(itemsRef, (snapshot) => {
       const data = snapshot.val();
-      setReservationList(Object.values(data));
+      if (data) setReservationList(Object.values(data));
+      else setReservationList([]); 
     })
-  }, []);
+  }
 
   const saveReservation = (reserveration: Reservation) => {
     const id = uuid.v4();
-    console.log(reserveration);
-    push(ref(database, 'reservations/'),
+    const itemsRef = ref(db, 'reservations/' + id);
+    set(itemsRef, 
       {
         'id': id,
         'startDate': reserveration.startDate.toString(),
@@ -59,9 +62,9 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
     setShowReservation(false)
   }
 
-  const removeReservation = () => {
-    // TODO
-    console.log("removed");
+  const removeReservation = (id: string) => {
+    const itemsRef = ref(db, `reservations/${id}`);
+    remove(itemsRef);
   }
 
   const listSeparator = () => {
@@ -98,7 +101,7 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
                         onPress: () => console.log("Cancel Pressed"),
                         style: "cancel"
                       },
-                      { text: "Poista", onPress: () => removeReservation() }
+                      { text: "Poista", onPress: () => removeReservation(item.id) }
                     ]
                   )}
                 name="trash"
@@ -127,7 +130,6 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
         : <Button onPress={() => setShowReservation(true)} title={"Tee uusi varaus"} />
       }
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-
       <FlatList
         style={{ marginLeft: "5%", marginRight: "5%" }}
         keyExtractor={item => item["id"]}

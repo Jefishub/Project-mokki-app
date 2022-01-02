@@ -33,8 +33,8 @@ interface ReportFromFirebase {
   info: string
 }
 
-const app = Firebase();
-const database = getDatabase(app);
+//const app = Firebase();
+// const database = getDatabase(app);
 
 export default function RaportitScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
   const [showReport, setShowReport] = useState(false)
@@ -42,17 +42,17 @@ export default function RaportitScreen({ navigation }: RootTabScreenProps<'TabOn
   const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
-    const itemsRef = ref(database, 'reports/');
+    /* const itemsRef = ref(database, 'reports/');
     onValue(itemsRef, (snapshot) => {
       const data = snapshot.val();
       setReportList(Object.values(data));
-    })
+    }) */
   }, []);
 
   const saveReport = (report: Report) => {
     const id = uuid.v4();
     console.log(report);
-    push(ref(database, 'reports/'),
+    /* push(ref(database, 'reports/'),
       {
         'id': id,
         'startDate': report.startDate.toString(),
@@ -63,7 +63,7 @@ export default function RaportitScreen({ navigation }: RootTabScreenProps<'TabOn
         'electricityLeave': report.electricityLeave,
         'waterLeave': report.waterLeave,
         'info': report.info
-      });
+      }); */
     setShowReport(false)
   }
 
