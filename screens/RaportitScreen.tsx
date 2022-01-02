@@ -37,7 +37,6 @@ const db = getDatabase(Firebase);
 export default function RaportitScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [reportList, setReportList] = useState([]);
-  const [editMode, setEditMode] = useState(false);
   const [UpdateScreen, setUpdateScreen] = useState(<></>);
 
   useEffect(() => {
@@ -94,10 +93,34 @@ export default function RaportitScreen({ navigation }: RootTabScreenProps<'TabOn
   const showUpdateScreen = (id: string) => {
     setUpdateScreen(
       <View style={styles.container}>
-        <ReportSheet cancel={cancelReport} save={(report) => updateReport(report, id)} />
+        <ReportSheet
+          cancel={cancelReport}
+          save={(report) => updateReport(report, id)}
+          remove={() => removeReservation(id)}
+        />
       </View>
     );
     setIsUpdating(true);
+  }
+
+  const removeReservation = (id: string) => {
+    Alert.alert(
+      'Poista tämä varaus:',
+      'Oletko varma, että haluat poistaa varauksen ?',
+      [
+        {
+          text: "peruuta",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        {
+          text: "Poista", onPress: () => {
+            removeReport(id);
+            setIsUpdating(false);
+          }
+        }
+      ]
+    )
   }
 
   const listView = (item: ReportFromFirebase) => {
@@ -110,34 +133,13 @@ export default function RaportitScreen({ navigation }: RootTabScreenProps<'TabOn
           <Text style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 4 }}>{DateToString(startDate)}</Text>
           <Text style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 4 }}>{DateToString(endDate)}</Text>
           <View style={{ flex: 3, alignItems: 'center' }}>
-            {editMode
-              ? <FontAwesome
-                onPress={() =>
-                  Alert.alert(
-                    'Poista tämä varaus:',
-                    'Oletko varma, että haluat poistaa varauksen ?',
-                    [
-                      {
-                        text: "peruuta",
-                        onPress: () => console.log("Cancel Pressed"),
-                        style: "cancel"
-                      },
-                      { text: "Poista", onPress: () => removeReport(item.id) }
-                    ]
-                  )}
-                name="trash"
-                size={25}
-                color={'red'}
-                style={{ marginRight: 15 }}
-              />
-              : <FontAwesome
-                onPress={() => showUpdateScreen(item.id)}
-                name="pencil"
-                size={25}
-                color={'#457b9d'}
-                style={{ marginRight: 15 }}
-              />
-            }
+            <FontAwesome
+              onPress={() => showUpdateScreen(item.id)}
+              name="pencil"
+              size={25}
+              color={'#457b9d'}
+              style={{ marginRight: 15 }}
+            />
           </View>
         </View>
         <View style={styles.separatorItem} />

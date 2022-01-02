@@ -13,11 +13,12 @@ interface Report {
     electricityLeave: string,
     waterLeave: string,
     info: string
-  }
+}
 
 interface ReportProps {
     save(report: Report): void,
     cancel(): void;
+    remove(): void;
 }
 
 export const ReportSheet = (buttonFunctions: ReportProps) => {
@@ -71,7 +72,11 @@ export const ReportSheet = (buttonFunctions: ReportProps) => {
         <View style={styles.container}>
             <View style={styles.buttonRow}>
                 <View style={styles.button}>
-                    <Button onPress={() => setPickerState(picker(true))} title={"Tulo"} />
+                    <Button
+                        onPress={() => setPickerState(picker(true))}
+                        title={"Tulo"}
+                        color={'#457b9d'}
+                    />
                 </View>
                 <View style={styles.textBox}>
                     <Text>{selectedStartDateString}</Text>
@@ -79,7 +84,11 @@ export const ReportSheet = (buttonFunctions: ReportProps) => {
             </View>
             <View style={styles.buttonRow}>
                 <View style={styles.button}>
-                    <Button onPress={() => setPickerState(picker(false))} title={"Lähtö"} />
+                    <Button
+                        onPress={() => setPickerState(picker(false))}
+                        title={"Lähtö"}
+                        color={'#457b9d'}
+                    />
                 </View>
                 <View style={styles.textBox}>
                     <Text>{selectedEndDateString}</Text>
@@ -130,18 +139,27 @@ export const ReportSheet = (buttonFunctions: ReportProps) => {
                 value={info}
             />
             <View style={styles.buttonRow}>
-                <Button onPress={() => buttonFunctions.save({
-                    startDate: selectedStartDate,
-                    endDate: selectedEndDate,
-                    reserver: reserver,
-                    electricityArrive: electricityArrive,
-                    waterArrive: waterArrive,
-                    electricityLeave: electricityLeave,
-                    waterLeave: waterLeave,
-                    info: info
-                })} title={"Tallenna raportti"} />
+                <Button
+                    onPress={() => buttonFunctions.save({
+                        startDate: selectedStartDate,
+                        endDate: selectedEndDate,
+                        reserver: reserver,
+                        electricityArrive: electricityArrive,
+                        waterArrive: waterArrive,
+                        electricityLeave: electricityLeave,
+                        waterLeave: waterLeave,
+                        info: info
+                    })}
+                    title={"Tallenna"}
+                    color={'#457b9d'} />
                 <View style={{ width: 12 }}></View>
                 <Button onPress={buttonFunctions.cancel} title={"Peruuta"} color={'grey'} />
+                <View style={{ width: 12 }}></View>
+                <Button
+                    onPress={buttonFunctions.remove}
+                    title={"Poista"}
+                    color={'#e63946'}
+                />
             </View>
             {pickerState}
         </View>
@@ -152,7 +170,7 @@ const styles = StyleSheet.create({
     container: {
         borderRadius: 12,
         padding: 12,
-        backgroundColor: 'lightblue',
+        backgroundColor: '#a8dadc',
         alignItems: 'center',
         justifyContent: 'center'
     },
