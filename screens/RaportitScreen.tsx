@@ -22,8 +22,8 @@ interface Report {
 
 interface ReportFromFirebase {
   id: string,
-  startDate: string,
-  endDate: string,
+  startDate: number,
+  endDate: number,
   reserver: string,
   electricityArrive: string,
   waterArrive: string,
@@ -57,8 +57,8 @@ export default function RaportitScreen({ navigation }: RootTabScreenProps<'TabOn
     const itemsRef = ref(db, `reservations/${id}`);
     update(itemsRef, {
       'id': id,
-      'startDate': report.startDate.toString(),
-      'endDate': report.endDate.toString(),
+      'startDate': Date.parse(report.startDate.toString()),
+      'endDate': Date.parse(report.endDate.toString()),
       'reserver': report.reserver,
       'electricityArrive': report.electricityArrive,
       'waterArrive': report.waterArrive,
@@ -101,8 +101,8 @@ export default function RaportitScreen({ navigation }: RootTabScreenProps<'TabOn
   }
 
   const listView = (item: ReportFromFirebase) => {
-    const startDate = new Date(Date.parse(item.startDate));
-    const endDate = new Date(Date.parse(item.endDate));
+    const startDate = new Date(item.startDate);
+    const endDate = new Date(item.endDate);
     return (
       <View style={styles.containerReport}>
         <View style={styles.infoRow}>
@@ -165,9 +165,7 @@ export default function RaportitScreen({ navigation }: RootTabScreenProps<'TabOn
       ? UpdateScreen
       : (
         <View style={styles.container}>
-          <Text style={styles.title}>Raportit</Text>
-          <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-
+          {/* TODO make first row with explanation */}
           <FlatList
             style={{ marginLeft: "5%", marginRight: "5%" }}
             keyExtractor={item => item["id"]}

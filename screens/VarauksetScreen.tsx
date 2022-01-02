@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Button, FlatList, ScrollView, Alert, Dimensions } from 'react-native'
-import { getDatabase, push, ref, onValue, update, set, remove } from "firebase/database";
+import { getDatabase, ref, onValue, update, set, remove, orderByChild, query, limitToLast } from "firebase/database";
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 import { DatePicker } from '../components/DatePicker';
@@ -18,8 +18,8 @@ interface Reservation {
 
 interface ReservationFromFirebase {
   id: string,
-  startDate: string,
-  endDate: string,
+  startDate: number,
+  endDate: number,
   reserver: string,
   info: string
 }
@@ -31,32 +31,37 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
   const [reservationList, setReservationList] = useState([]);
   const [editMode, setEditMode] = useState(false);
 
-  useEffect(() => { 
+  useEffect(() => {
     getData()
   }, []);
 
   const getData = () => {
-    const itemsRef = ref(db, 'reservations/');
+    const itemsRef = query(ref(db, 'reservations'), orderByChild('startDate'), limitToLast(100));
     onValue(itemsRef, (snapshot) => {
       const data = snapshot.val();
-      if (data) setReservationList(Object.values(data));
-      else setReservationList([]); 
+      if (data) {
+        setReservationList(Object.values(data));
+        //setReservationList(reservationList.reverse());
+      }
+      else setReservationList([]);
     })
   }
 
   const saveReservation = (reserveration: Reservation) => {
-    const id = uuid.v4();
+    const id = (Date.parse(reserveration.startDate.toString())).toString() + uuid.v4();
     const itemsRef = ref(db, `reservations/${id}`);
-    set(itemsRef, 
+    set(itemsRef,
       {
         'id': id,
-        'startDate': reserveration.startDate.toString(),
-        'endDate': reserveration.endDate.toString(),
+        'startDate': Date.parse(reserveration.startDate.toString()),
+        'endDate': Date.parse(reserveration.endDate.toString()),
         'reserver': reserveration.reserver,
         'info': reserveration.info
       });
     setShowReservation(false)
   }
+
+  // TODO update reservation
 
   const cancelReservation = () => {
     setShowReservation(false)
@@ -81,50 +86,49 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
   };
 
   const listView = (item: ReservationFromFirebase) => {
-    const startDate = new Date(Date.parse(item.startDate));
-    const endDate = new Date(Date.parse(item.endDate));
+    const startDate = new Date(item.startDate);
+    const endDate = new Date(item.endDate);
     return (
       <View style={styles.listcontainer}>
-          <Text style={{ fontSize: 18, backgroundColor: '#afffff', flex: 3 }}>{item.reserver}</Text>
-          <Text style={{ fontSize: 18, backgroundColor: '#aaafff', flex: 5 }}>{DateToString(startDate)}</Text>
-          <Text style={{ fontSize: 18, backgroundColor: '#ffffaa', flex: 5 }}>{DateToString(endDate)}</Text>
-          <View style={{ flex: 2, alignItems: 'center' }}>
-            {editMode
-              ? <FontAwesome
-                onPress={() =>
-                  Alert.alert(
-                    'Poista tämä varaus:',
-                    'Oletko varma, että haluat poistaa varauksen ?',
-                    [
-                      {
-                        text: "peruuta",
-                        onPress: () => console.log("Cancel Pressed"),
-                        style: "cancel"
-                      },
-                      { text: "Poista", onPress: () => removeReservation(item.id) }
-                    ]
-                  )}
-                name="trash"
-                size={25}
-                color={'red'}
-                style={{ marginRight: 15 }}
-              />
-              : <FontAwesome
-                onPress={() => Alert.alert('Muut tiedot:', item.info)}
-                name="info-circle"
-                size={25}
-                color={'teal'}
-                style={{ marginRight: 15 }}
-              />
-            }
-          </View>
+        <Text style={{ fontSize: 18, backgroundColor: '#afffff', flex: 3 }}>{item.reserver}</Text>
+        <Text style={{ fontSize: 18, backgroundColor: '#aaafff', flex: 5 }}>{DateToString(startDate)}</Text>
+        <Text style={{ fontSize: 18, backgroundColor: '#ffffaa', flex: 5 }}>{DateToString(endDate)}</Text>
+        <View style={{ flex: 2, alignItems: 'center' }}>
+          {editMode
+            ? <FontAwesome
+              onPress={() =>
+                Alert.alert(
+                  'Poista tämä varaus:',
+                  'Oletko varma, että haluat poistaa varauksen ?',
+                  [
+                    {
+                      text: "peruuta",
+                      onPress: () => console.log("Cancel Pressed"),
+                      style: "cancel"
+                    },
+                    { text: "Poista", onPress: () => removeReservation(item.id) }
+                  ]
+                )}
+              name="trash"
+              size={25}
+              color={'red'}
+              style={{ marginRight: 15 }}
+            />
+            : <FontAwesome
+              onPress={() => Alert.alert('Muut tiedot:', item.info)}
+              name="info-circle"
+              size={25}
+              color={'teal'}
+              style={{ marginRight: 15 }}
+            />
+          }
+        </View>
       </View>
     )
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Mökkivaraukset</Text>
       {showReservation
         ? <DatePicker cancel={cancelReservation} save={(reserveration) => saveReservation(reserveration)} />
         : <Button onPress={() => setShowReservation(true)} title={"Tee uusi varaus"} />
