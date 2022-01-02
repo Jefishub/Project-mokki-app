@@ -14,6 +14,7 @@ interface Reservation {
 interface CalendarProps {
     save(reserveration: Reservation): void,
     cancel(): void;
+    remove?(): void;
 }
 
 export const DatePicker = (buttonFunctions: CalendarProps) => {
@@ -84,7 +85,7 @@ export const DatePicker = (buttonFunctions: CalendarProps) => {
                 value={reserver}
             />
             <TextInput
-                style={styles.input}
+                style={styles.inputLong}
                 placeholder='Muut tiedot'
                 onChangeText={setInfo}
                 value={info}
@@ -95,9 +96,11 @@ export const DatePicker = (buttonFunctions: CalendarProps) => {
                     endDate: selectedEndDate,
                     reserver: reserver,
                     info: info
-                })} title={"Tallenna reserveration"} />
+                })} title={"Tallenna"} />
                 <View style={{ width: 12 }}></View>
                 <Button onPress={buttonFunctions.cancel} title={"Peruuta"} color={'grey'} />
+                <View style={{ width: 12 }}></View>
+                {buttonFunctions.remove && <Button onPress={buttonFunctions.remove} title={"Poista"} color={'red'} />}
             </View>
             {pickerState}
         </View>
@@ -133,6 +136,14 @@ const styles = StyleSheet.create({
         padding: 6,
         margin: 6,
         height: 40,
+        width: 230,
+        borderWidth: 1,
+    },
+    inputLong: {
+        backgroundColor: 'white',
+        padding: 6,
+        margin: 6,
+        height: 80,
         width: 230,
         borderWidth: 1,
     }

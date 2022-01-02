@@ -126,7 +126,7 @@ export const ReportSheet = (buttonFunctions: ReportProps) => {
                 />
             </View>
             <TextInput
-                style={styles.input}
+                style={styles.inputLong}
                 placeholder='Muut tiedot'
                 onChangeText={setInfo}
                 value={info}
@@ -179,6 +179,14 @@ const styles = StyleSheet.create({
         padding: 6,
         margin: 6,
         height: 40,
+        width: 230,
+        borderWidth: 1,
+    },
+    inputLong: {
+        backgroundColor: 'white',
+        padding: 6,
+        margin: 6,
+        height: 80,
         width: 230,
         borderWidth: 1,
     },

@@ -30,6 +30,8 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
   const [showReservation, setShowReservation] = useState(false)
   const [reservationList, setReservationList] = useState([]);
   const [editMode, setEditMode] = useState(false);
+  const [showUpdate, setShowUpdate] = useState(false);
+  const [updateId, setUpdateId] = useState('');
 
   useEffect(() => {
     getData()
@@ -41,7 +43,6 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
       const data = snapshot.val();
       if (data) {
         setReservationList(Object.values(data));
-        //setReservationList(reservationList.reverse());
       }
       else setReservationList([]);
     })
@@ -61,15 +62,45 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
     setShowReservation(false)
   }
 
-  // TODO update reservation
+  const updateReport = (reserveration: Reservation, id: string) => {
+    const itemsRef = ref(db, `reservations/${id}`);
+    update(itemsRef, {
+      'id': id,
+      'startDate': Date.parse(reserveration.startDate.toString()),
+      'endDate': Date.parse(reserveration.endDate.toString()),
+      'reserver': reserveration.reserver,
+      'info': reserveration.info
+    })
+    setShowUpdate(false);
+  }
 
   const cancelReservation = () => {
     setShowReservation(false)
   }
 
+  const cancelUpdate = () => {
+    setShowUpdate(false)
+  }
+
   const removeReservation = (id: string) => {
-    const itemsRef = ref(db, `reservations/${id}`);
-    remove(itemsRef);
+    Alert.alert(
+      'Poista tämä varaus:',
+      'Oletko varma, että haluat poistaa varauksen ?',
+      [
+        {
+          text: "peruuta",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        {
+          text: "Poista", onPress: () => {
+            const itemsRef = ref(db, `reservations/${id}`);
+            remove(itemsRef);
+            setShowUpdate(false);
+          }
+        }
+      ]
+    )
   }
 
   const listSeparator = () => {
@@ -85,6 +116,11 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
     );
   };
 
+  const toggleUpdate = (id: string) => {
+    setUpdateId(id);
+    setShowUpdate(true);
+  }
+
   const listView = (item: ReservationFromFirebase) => {
     const startDate = new Date(item.startDate);
     const endDate = new Date(item.endDate);
@@ -96,22 +132,10 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
         <View style={{ flex: 2, alignItems: 'center' }}>
           {editMode
             ? <FontAwesome
-              onPress={() =>
-                Alert.alert(
-                  'Poista tämä varaus:',
-                  'Oletko varma, että haluat poistaa varauksen ?',
-                  [
-                    {
-                      text: "peruuta",
-                      onPress: () => console.log("Cancel Pressed"),
-                      style: "cancel"
-                    },
-                    { text: "Poista", onPress: () => removeReservation(item.id) }
-                  ]
-                )}
-              name="trash"
+              onPress={() => toggleUpdate(item.id)}
+              name="pencil"
               size={25}
-              color={'red'}
+              color={'teal'}
               style={{ marginRight: 15 }}
             />
             : <FontAwesome
@@ -130,24 +154,36 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
   return (
     <View style={styles.container}>
       {showReservation
-        ? <DatePicker cancel={cancelReservation} save={(reserveration) => saveReservation(reserveration)} />
-        : <Button onPress={() => setShowReservation(true)} title={"Tee uusi varaus"} />
-      }
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <FlatList
-        style={{ marginLeft: "5%", marginRight: "5%" }}
-        keyExtractor={item => item["id"]}
-        renderItem={({ item }) => listView(item)}
-        data={reservationList}
-        ItemSeparatorComponent={listSeparator}
-      />
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <View style={{ marginBottom: 30 }}>
-        <Button onPress={
-          () => setEditMode(!editMode)}
-          title={editMode ? "Poistu muokkausmoodista" : "Muokkaa varauksia"}
+        ? <DatePicker
+          cancel={cancelReservation}
+          save={(reserveration) => saveReservation(reserveration)}
         />
-      </View>
+        :
+        showUpdate ? <DatePicker
+          cancel={cancelUpdate}
+          save={(reserveration) => updateReport(reserveration, updateId)}
+          remove={() => removeReservation(updateId)}
+        />
+          :
+          <View>
+            <Button onPress={() => setShowReservation(true)} title={"Tee uusi varaus"} />
+            <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+            <FlatList
+              style={{ marginLeft: "5%", marginRight: "5%" }}
+              keyExtractor={item => item["id"]}
+              renderItem={({ item }) => listView(item)}
+              data={reservationList}
+              ItemSeparatorComponent={listSeparator}
+            />
+            <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+            <View style={{ marginBottom: 30 }}>
+              <Button onPress={
+                () => setEditMode(!editMode)}
+                title={editMode ? "Poistu muokkausmoodista" : "Muokkaa varauksia"}
+              />
+            </View>
+          </View>
+      }
     </View>
   );
 }
