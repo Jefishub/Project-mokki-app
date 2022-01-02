@@ -46,7 +46,7 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
 
   const saveReservation = (reserveration: Reservation) => {
     const id = uuid.v4();
-    const itemsRef = ref(db, 'reservations/' + id);
+    const itemsRef = ref(db, `reservations/${id}`);
     set(itemsRef, 
       {
         'id': id,
