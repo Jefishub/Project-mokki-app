@@ -19,21 +19,22 @@ interface ReportProps {
     save(report: Report): void,
     cancel(): void;
     remove(): void;
+    report: Report;
 }
 
-export const ReportSheet = (buttonFunctions: ReportProps) => {
+export const ReportSheet = (reportProps: ReportProps) => {
     const today = new Date();
-    const [selectedStartDate, setSelectedStartDate] = useState(today);
+    const [selectedStartDate, setSelectedStartDate] = useState(reportProps.report.startDate);
     const [selectedStartDateString, setSelectedStartDateString] = useState('');
-    const [selectedEndDate, setSelectedEndDate] = useState(today);
+    const [selectedEndDate, setSelectedEndDate] = useState(reportProps.report.endDate);
     const [selectedEndDateString, setSelectedEndDateString] = useState('');
     const [pickerState, setPickerState] = useState(<></>);
-    const [reserver, setReserver] = useState('');
-    const [electricityArrive, setElectricityArrive] = useState('');
-    const [waterArrive, setWaterArrive] = useState('');
-    const [electricityLeave, setElectricityLeave] = useState('');
-    const [waterLeave, setWaterLeave] = useState('');
-    const [info, setInfo] = useState('');
+    const [reserver, setReserver] = useState(reportProps.report.reserver);
+    const [electricityArrive, setElectricityArrive] = useState(reportProps.report.electricityArrive);
+    const [waterArrive, setWaterArrive] = useState(reportProps.report.waterArrive);
+    const [electricityLeave, setElectricityLeave] = useState(reportProps.report.electricityLeave);
+    const [waterLeave, setWaterLeave] = useState(reportProps.report.waterLeave);
+    const [info, setInfo] = useState(reportProps.report.info);
 
     useEffect(() =>
         setSelectedStartDateString(DateToString(selectedStartDate))
@@ -140,7 +141,7 @@ export const ReportSheet = (buttonFunctions: ReportProps) => {
             />
             <View style={styles.buttonRow}>
                 <Button
-                    onPress={() => buttonFunctions.save({
+                    onPress={() => reportProps.save({
                         startDate: selectedStartDate,
                         endDate: selectedEndDate,
                         reserver: reserver,
@@ -153,10 +154,10 @@ export const ReportSheet = (buttonFunctions: ReportProps) => {
                     title={"Tallenna"}
                     color={'#457b9d'} />
                 <View style={{ width: 12 }}></View>
-                <Button onPress={buttonFunctions.cancel} title={"Peruuta"} color={'grey'} />
+                <Button onPress={reportProps.cancel} title={"Peruuta"} color={'grey'} />
                 <View style={{ width: 12 }}></View>
                 <Button
-                    onPress={buttonFunctions.remove}
+                    onPress={reportProps.remove}
                     title={"Poista"}
                     color={'#e63946'}
                 />

@@ -90,13 +90,14 @@ export default function RaportitScreen({ navigation }: RootTabScreenProps<'TabOn
     );
   };
 
-  const showUpdateScreen = (id: string) => {
+  const showUpdateScreen = (report: Report, id: string) => {
     setUpdateScreen(
       <View style={styles.container}>
         <ReportSheet
           cancel={cancelReport}
-          save={(report) => updateReport(report, id)}
+          save={(updatedReport) => updateReport(updatedReport, id)}
           remove={() => removeReservation(id)}
+          report={report}
         />
       </View>
     );
@@ -126,6 +127,16 @@ export default function RaportitScreen({ navigation }: RootTabScreenProps<'TabOn
   const listView = (item: ReportFromFirebase) => {
     const startDate = new Date(item.startDate);
     const endDate = new Date(item.endDate);
+    const currentReport = {
+      'startDate': startDate,
+      'endDate': endDate,
+      'reserver': item.reserver,
+      'electricityArrive': item.electricityArrive,
+      'waterArrive': item.waterArrive,
+      'electricityLeave': item.electricityLeave,
+      'waterLeave': item.waterLeave,
+      'info': item.info
+    }
     return (
       <View style={styles.containerReport}>
         <View style={styles.infoRow}>
@@ -134,7 +145,7 @@ export default function RaportitScreen({ navigation }: RootTabScreenProps<'TabOn
           <Text style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 4 }}>{DateToString(endDate)}</Text>
           <View style={{ flex: 3, alignItems: 'center' }}>
             <FontAwesome
-              onPress={() => showUpdateScreen(item.id)}
+              onPress={() => showUpdateScreen(currentReport, item.id)}
               name="pencil"
               size={25}
               color={'#457b9d'}
