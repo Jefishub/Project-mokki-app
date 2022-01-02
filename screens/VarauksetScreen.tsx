@@ -157,7 +157,7 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
         <Text style={{ color:'white',fontSize: 18, backgroundColor: '#457b9d', flex: 3 }}>Varaaja</Text>
         <Text style={{ color:'white',fontSize: 18, backgroundColor: '#457b9d', flex: 5 }}>Tulo</Text>
         <Text style={{ color:'white',fontSize: 18, backgroundColor: '#457b9d', flex: 5 }}>Lähtö</Text>
-        <View style={{ flex: 1 }}></View>
+        <View style={{ flex: 2 }}></View>
       </View>
     )
   }
@@ -190,7 +190,7 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
               ItemSeparatorComponent={listSeparator}
             />
             <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-            <View style={{ marginBottom: 30, width: 150, alignSelf: 'center' }}>
+            <View style={{ marginBottom: 30, width: 200, alignSelf: 'center' }}>
               <Button onPress={
                 () => setEditMode(!editMode)}
                 title={editMode ? "Poistu muokkausmoodista" : "Muokkaa varauksia"}
@@ -219,7 +219,6 @@ const styles = StyleSheet.create({
   firstColumn: {
     flexDirection: 'row',
     marginLeft: "5%",
-    marginRight: "6.2%"
   },
   title: {
     marginBottom: 12,

@@ -107,8 +107,8 @@ export default function RaportitScreen({ navigation }: RootTabScreenProps<'TabOn
       <View style={styles.containerReport}>
         <View style={styles.infoRow}>
           <Text numberOfLines={1} style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 3 }}>{item.reserver}</Text>
-          <Text style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 5 }}>{DateToString(startDate)}</Text>
-          <Text style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 5 }}>{DateToString(endDate)}</Text>
+          <Text style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 4 }}>{DateToString(startDate)}</Text>
+          <Text style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 4 }}>{DateToString(endDate)}</Text>
           <View style={{ flex: 3, alignItems: 'center' }}>
             {editMode
               ? <FontAwesome
@@ -144,16 +144,16 @@ export default function RaportitScreen({ navigation }: RootTabScreenProps<'TabOn
         {/* TODO Make string checks for numbers */}
         <View style={styles.infoRow}>
           <Text style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 3 }}>Sähkö:</Text>
-          <Text style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 5 }}>{item.electricityArrive}</Text>
-          <Text style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 5 }}>{item.electricityLeave}</Text>
+          <Text style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 4 }}>{item.electricityArrive}</Text>
+          <Text style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 4 }}>{item.electricityLeave}</Text>
           <Text style={{ fontSize: 18, backgroundColor: '#f1faee', flex: 3 }}>{Number(item.electricityLeave) - Number(item.electricityArrive)}</Text>
         </View>
         <View style={styles.separatorItem} />
         {/* TODO Make string checks for numbers */}
         <View style={styles.infoRow}>
           <Text style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 3 }}>Vesi:</Text>
-          <Text style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 5 }}>{Number(item.waterArrive).toFixed(3)}</Text>
-          <Text style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 5 }}>{Number(item.waterLeave).toFixed(3)}</Text>
+          <Text style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 4 }}>{Number(item.waterArrive).toFixed(3)}</Text>
+          <Text style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 4 }}>{Number(item.waterLeave).toFixed(3)}</Text>
           <Text style={{ fontSize: 18, backgroundColor: '#f1faee', flex: 3 }}>{(Number(item.waterLeave) - Number(item.waterArrive)).toFixed(3)}</Text>
         </View>
       </View>
@@ -164,9 +164,9 @@ export default function RaportitScreen({ navigation }: RootTabScreenProps<'TabOn
     return (
       <View style={styles.firstColumn}>
         <Text style={{ color: 'white', fontSize: 18, backgroundColor: '#457b9d', flex: 3 }}>Varaaja</Text>
-        <Text style={{ color: 'white', fontSize: 18, backgroundColor: '#457b9d', flex: 5 }}>Tulo</Text>
-        <Text style={{ color: 'white', fontSize: 18, backgroundColor: '#457b9d', flex: 5 }}>Lähtö</Text>
-        <View style={{ flex: 2 }}></View>
+        <Text style={{ color: 'white', fontSize: 18, backgroundColor: '#457b9d', flex: 4 }}>Tulo</Text>
+        <Text style={{ color: 'white', fontSize: 18, backgroundColor: '#457b9d', flex: 4 }}>Lähtö</Text>
+        <Text style={{ color: 'white', fontSize: 18, backgroundColor: '#457b9d', flex: 3 }}>Erotus</Text>
       </View>
     )
   }
@@ -177,7 +177,6 @@ export default function RaportitScreen({ navigation }: RootTabScreenProps<'TabOn
       : (
         <View style={styles.container}>
           {firstColumn()}
-          {/* TODO make first row with explanation */}
           <FlatList
             style={{ marginLeft: "5%", marginRight: "5%" }}
             keyExtractor={item => item["id"]}
@@ -186,13 +185,6 @@ export default function RaportitScreen({ navigation }: RootTabScreenProps<'TabOn
             ItemSeparatorComponent={listSeparator}
           />
           <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-          <View style={{ marginBottom: 30 }}>
-            <Button onPress={
-              () => setEditMode(!editMode)}
-              title={editMode ? "Takaisin" : "Poista raportteja"}
-              color={'#457b9d'}
-            />
-          </View>
         </View>
       )
   );
@@ -214,7 +206,7 @@ const styles = StyleSheet.create({
   firstColumn: {
     flexDirection: 'row',
     marginLeft: "5%",
-    marginRight: "6.2%"
+    marginRight: "5%"
   },
   listcontainer: {
     flexDirection: 'column',
