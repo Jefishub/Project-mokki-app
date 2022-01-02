@@ -106,9 +106,9 @@ export default function RaportitScreen({ navigation }: RootTabScreenProps<'TabOn
     return (
       <View style={styles.containerReport}>
         <View style={styles.infoRow}>
-          <Text style={{ fontSize: 18, backgroundColor: '#afffff', flex: 3 }}>{item.reserver}</Text>
-          <Text style={{ fontSize: 18, backgroundColor: '#aaafff', flex: 5 }}>{DateToString(startDate)}</Text>
-          <Text style={{ fontSize: 18, backgroundColor: '#ffffaa', flex: 5 }}>{DateToString(endDate)}</Text>
+          <Text numberOfLines={1} style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 3 }}>{item.reserver}</Text>
+          <Text style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 5 }}>{DateToString(startDate)}</Text>
+          <Text style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 5 }}>{DateToString(endDate)}</Text>
           <View style={{ flex: 3, alignItems: 'center' }}>
             {editMode
               ? <FontAwesome
@@ -134,7 +134,7 @@ export default function RaportitScreen({ navigation }: RootTabScreenProps<'TabOn
                 onPress={() => showUpdateScreen(item.id)}
                 name="pencil"
                 size={25}
-                color={'teal'}
+                color={'#457b9d'}
                 style={{ marginRight: 15 }}
               />
             }
@@ -143,19 +143,30 @@ export default function RaportitScreen({ navigation }: RootTabScreenProps<'TabOn
         <View style={styles.separatorItem} />
         {/* TODO Make string checks for numbers */}
         <View style={styles.infoRow}>
-          <Text style={{ fontSize: 18, backgroundColor: '#afffff', flex: 3 }}>Sähkö:</Text>
-          <Text style={{ fontSize: 18, backgroundColor: '#afffff', flex: 5 }}>{item.electricityArrive}</Text>
-          <Text style={{ fontSize: 18, backgroundColor: '#afffff', flex: 5 }}>{item.electricityLeave}</Text>
-          <Text style={{ fontSize: 18, backgroundColor: '#afffff', flex: 3 }}>{Number(item.electricityLeave) - Number(item.electricityArrive)}</Text>
+          <Text style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 3 }}>Sähkö:</Text>
+          <Text style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 5 }}>{item.electricityArrive}</Text>
+          <Text style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 5 }}>{item.electricityLeave}</Text>
+          <Text style={{ fontSize: 18, backgroundColor: '#f1faee', flex: 3 }}>{Number(item.electricityLeave) - Number(item.electricityArrive)}</Text>
         </View>
         <View style={styles.separatorItem} />
         {/* TODO Make string checks for numbers */}
         <View style={styles.infoRow}>
-          <Text style={{ fontSize: 18, backgroundColor: '#afffff', flex: 3 }}>Vesi:</Text>
-          <Text style={{ fontSize: 18, backgroundColor: '#afffff', flex: 5 }}>{Number(item.waterArrive).toFixed(3)}</Text>
-          <Text style={{ fontSize: 18, backgroundColor: '#afffff', flex: 5 }}>{Number(item.waterLeave).toFixed(3)}</Text>
-          <Text style={{ fontSize: 18, backgroundColor: '#afffff', flex: 3 }}>{(Number(item.waterLeave) - Number(item.waterArrive)).toFixed(3)}</Text>
+          <Text style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 3 }}>Vesi:</Text>
+          <Text style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 5 }}>{Number(item.waterArrive).toFixed(3)}</Text>
+          <Text style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 5 }}>{Number(item.waterLeave).toFixed(3)}</Text>
+          <Text style={{ fontSize: 18, backgroundColor: '#f1faee', flex: 3 }}>{(Number(item.waterLeave) - Number(item.waterArrive)).toFixed(3)}</Text>
         </View>
+      </View>
+    )
+  }
+
+  const firstColumn = () => {
+    return (
+      <View style={styles.firstColumn}>
+        <Text style={{ color: 'white', fontSize: 18, backgroundColor: '#457b9d', flex: 3 }}>Varaaja</Text>
+        <Text style={{ color: 'white', fontSize: 18, backgroundColor: '#457b9d', flex: 5 }}>Tulo</Text>
+        <Text style={{ color: 'white', fontSize: 18, backgroundColor: '#457b9d', flex: 5 }}>Lähtö</Text>
+        <View style={{ flex: 2 }}></View>
       </View>
     )
   }
@@ -165,6 +176,7 @@ export default function RaportitScreen({ navigation }: RootTabScreenProps<'TabOn
       ? UpdateScreen
       : (
         <View style={styles.container}>
+          {firstColumn()}
           {/* TODO make first row with explanation */}
           <FlatList
             style={{ marginLeft: "5%", marginRight: "5%" }}
@@ -177,7 +189,8 @@ export default function RaportitScreen({ navigation }: RootTabScreenProps<'TabOn
           <View style={{ marginBottom: 30 }}>
             <Button onPress={
               () => setEditMode(!editMode)}
-              title={editMode ? "Takaisin" : "Poista raportteja"}              
+              title={editMode ? "Takaisin" : "Poista raportteja"}
+              color={'#457b9d'}
             />
           </View>
         </View>
@@ -197,6 +210,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  firstColumn: {
+    flexDirection: 'row',
+    marginLeft: "5%",
+    marginRight: "6.2%"
   },
   listcontainer: {
     flexDirection: 'column',

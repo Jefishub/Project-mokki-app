@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Button, Platform, Text, StyleSheet } from 'react-native';
+import { View, Button, Text, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { TextInput } from 'react-native-gesture-handler';
 import DateToString from '../utils/dateHelper';
@@ -17,7 +17,7 @@ interface CalendarProps {
     remove?(): void;
 }
 
-export const DatePicker = (buttonFunctions: CalendarProps) => {
+export const Reservation = (buttonFunctions: CalendarProps) => {
     const today = new Date();
     const [selectedStartDate, setSelectedStartDate] = useState(today);
     const [selectedStartDateString, setSelectedStartDateString] = useState('');

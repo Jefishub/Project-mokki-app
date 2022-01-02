@@ -3,7 +3,7 @@ import { StyleSheet, Button, FlatList, ScrollView, Alert, Dimensions } from 'rea
 import { getDatabase, ref, onValue, update, set, remove, orderByChild, query, limitToLast } from "firebase/database";
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
-import { DatePicker } from '../components/DatePicker';
+import { Reservation } from '../components/Reservation';
 import Firebase from '../utils/firebase';
 import uuid from 'react-native-uuid';
 import DateToString from '../utils/dateHelper';
@@ -126,23 +126,23 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
     const endDate = new Date(item.endDate);
     return (
       <View style={styles.listcontainer}>
-        <Text style={{ fontSize: 18, backgroundColor: '#afffff', flex: 3 }}>{item.reserver}</Text>
-        <Text style={{ fontSize: 18, backgroundColor: '#aaafff', flex: 5 }}>{DateToString(startDate)}</Text>
-        <Text style={{ fontSize: 18, backgroundColor: '#ffffaa', flex: 5 }}>{DateToString(endDate)}</Text>
+        <Text numberOfLines={1} style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 3, borderColor: 'black', borderBottomWidth: 1 }}>{item.reserver}</Text>
+        <Text style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 5, borderColor: 'black', borderBottomWidth: 1 }}>{DateToString(startDate)}</Text>
+        <Text style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 5, borderColor: 'black', borderBottomWidth: 1 }}>{DateToString(endDate)}</Text>
         <View style={{ flex: 2, alignItems: 'center' }}>
           {editMode
             ? <FontAwesome
               onPress={() => toggleUpdate(item.id)}
               name="pencil"
               size={25}
-              color={'teal'}
+              color={'#457b9d'}
               style={{ marginRight: 15 }}
             />
             : <FontAwesome
               onPress={() => Alert.alert('Muut tiedot:', item.info)}
               name="info-circle"
               size={25}
-              color={'teal'}
+              color={'#457b9d'}
               style={{ marginRight: 15 }}
             />
           }
@@ -151,23 +151,37 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
     )
   }
 
+  const firstColumn = () => {
+    return (
+      <View style={styles.firstColumn}>
+        <Text style={{ color:'white',fontSize: 18, backgroundColor: '#457b9d', flex: 3 }}>Varaaja</Text>
+        <Text style={{ color:'white',fontSize: 18, backgroundColor: '#457b9d', flex: 5 }}>Tulo</Text>
+        <Text style={{ color:'white',fontSize: 18, backgroundColor: '#457b9d', flex: 5 }}>Lähtö</Text>
+        <View style={{ flex: 1 }}></View>
+      </View>
+    )
+  }
+
   return (
     <View style={styles.container}>
       {showReservation
-        ? <DatePicker
+        ? <Reservation
           cancel={cancelReservation}
           save={(reserveration) => saveReservation(reserveration)}
         />
         :
-        showUpdate ? <DatePicker
+        showUpdate ? <Reservation
           cancel={cancelUpdate}
-          save={(reserveration) => updateReport(reserveration, updateId)}
+          save={(reservation) => updateReport(reservation, updateId)}
           remove={() => removeReservation(updateId)}
         />
           :
-          <View>
-            <Button onPress={() => setShowReservation(true)} title={"Tee uusi varaus"} />
+          <>
+            <View style={{ width: 150, alignSelf: 'center' }}>
+              <Button onPress={() => setShowReservation(true)} title={"Tee uusi varaus"} color={'#457b9d'} />
+            </View>
             <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+            {firstColumn()}
             <FlatList
               style={{ marginLeft: "5%", marginRight: "5%" }}
               keyExtractor={item => item["id"]}
@@ -176,13 +190,14 @@ export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabO
               ItemSeparatorComponent={listSeparator}
             />
             <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-            <View style={{ marginBottom: 30 }}>
+            <View style={{ marginBottom: 30, width: 150, alignSelf: 'center' }}>
               <Button onPress={
                 () => setEditMode(!editMode)}
                 title={editMode ? "Poistu muokkausmoodista" : "Muokkaa varauksia"}
+                color={'#457b9d'}
               />
             </View>
-          </View>
+          </>
       }
     </View>
   );
@@ -200,6 +215,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#fff',
     alignItems: 'center'
+  },
+  firstColumn: {
+    flexDirection: 'row',
+    marginLeft: "5%",
+    marginRight: "6.2%"
   },
   title: {
     marginBottom: 12,
