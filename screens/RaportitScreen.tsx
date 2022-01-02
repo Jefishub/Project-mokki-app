@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Button, FlatList, Alert, Dimensions } from 'react-native'
-import { getDatabase, ref, onValue, update } from "firebase/database";
+import { getDatabase, ref, onValue, update, remove } from "firebase/database";
 
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
@@ -73,9 +73,9 @@ export default function RaportitScreen({ navigation }: RootTabScreenProps<'TabOn
     setIsUpdating(false);
   }
 
-  const removeReport = () => {
-    // TODO
-    console.log("removed");
+  const removeReport = (id: string) => {
+    const itemsRef = ref(db, `reservations/${id}`);
+    remove(itemsRef);
   }
 
   const listSeparator = () => {
@@ -122,7 +122,7 @@ export default function RaportitScreen({ navigation }: RootTabScreenProps<'TabOn
                         onPress: () => console.log("Cancel Pressed"),
                         style: "cancel"
                       },
-                      { text: "Poista", onPress: () => removeReport() }
+                      { text: "Poista", onPress: () => removeReport(item.id) }
                     ]
                   )}
                 name="trash"
@@ -165,7 +165,7 @@ export default function RaportitScreen({ navigation }: RootTabScreenProps<'TabOn
       ? UpdateScreen
       : (
         <View style={styles.container}>
-          <Text style={styles.title}>Mökkivaraukset</Text>
+          <Text style={styles.title}>Raportit</Text>
           <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
 
           <FlatList
