@@ -8,9 +8,10 @@ import { Text, View } from '../components/Themed';
 export default function AdminScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Admin Login</Text>
+      <Text style={styles.title}>Informaatiosivu</Text>
+      <Text>Mökkitie 1</Text>
+      <Text>Mökkikaupunki, 41242</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/AdminScreen.tsx" />
 
       {/* Use a light status bar on iOS to account for the black space above the modal */}
       <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />

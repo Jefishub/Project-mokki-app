@@ -25,6 +25,11 @@ const linking: LinkingOptions<RootStackParamList> = {
               RaportitScreen: 'two',
             },
           },
+          TabThree: {
+            screens: {
+              RaportitScreen: 'three',
+            },
+          },
         },
       },
       Modal: 'modal',
