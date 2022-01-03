@@ -4,10 +4,11 @@ import { getDatabase, ref, onValue, update, remove } from "firebase/database";
 
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
-import Firebase from '../utils/firebase';
+import firebase from 'firebase/compat/app';
 import DateToString from '../utils/dateHelper';
 import { ReportSheet } from '../components/Reports';
 import FontAwesome from '@expo/vector-icons/build/FontAwesome';
+import CONFIG from '../config';
 
 interface Report {
   startDate: Date,
@@ -32,7 +33,8 @@ interface ReportFromFirebase {
   info: string
 }
 
-const db = getDatabase(Firebase);
+const firebaseApp = firebase.initializeApp(CONFIG.firebase.firebaseConfig)
+const db = getDatabase(firebaseApp);
 
 export default function RaportitScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
   const [isUpdating, setIsUpdating] = useState(false);

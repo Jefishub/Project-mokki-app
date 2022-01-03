@@ -4,10 +4,11 @@ import { getDatabase, ref, onValue, update, set, remove, orderByChild, query, li
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 import { Reservation } from '../components/Reservation';
-import Firebase from '../utils/firebase';
+import firebase from 'firebase/compat/app';
 import uuid from 'react-native-uuid';
 import DateToString from '../utils/dateHelper';
 import FontAwesome from '@expo/vector-icons/build/FontAwesome';
+import CONFIG from '../config';
 
 interface Reservation {
   startDate: Date,
@@ -24,7 +25,8 @@ interface ReservationFromFirebase {
   info: string
 }
 
-const db = getDatabase(Firebase);
+const firebaseApp = firebase.initializeApp(CONFIG.firebase.firebaseConfig)
+const db = getDatabase(firebaseApp);
 
 export default function VarauksetScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
   const [showReservation, setShowReservation] = useState(false)
