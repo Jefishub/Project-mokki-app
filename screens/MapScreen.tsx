@@ -7,10 +7,13 @@ import { StyleSheet, StatusBar, TextInput, Button, Alert } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 
+
+// TODO use config file for api key
 const API_URL = "http://www.mapquestapi.com/geocoding/v1/address";
 const API_KEY = "nk4AOXVkJGl4bHJ7ycsAQdTN2JRd4YW1";
-const INITIAL_REGION = { latitude: 60.200692, longitude: 24.934302, latitudeDelta: 0.003, longitudeDelta: 0.002, };
-const INITIAL_MARKER = { latitude: 60.200692, longitude: 24.934302 }
+const INITIAL_REGION = { latitude: 60.443346, longitude: 25.392492, latitudeDelta: 0.003, longitudeDelta: 0.002, };
+const INITIAL_MARKER = { latitude: 60.443346, longitude: 25.392492 }
+// location chosen randomly from map, 07150 Pornainen
 
 export default function MapScreen({ navigation }: RootTabScreenProps<'TabThree'>) {
     const [latLng, setLatLng] = useState(INITIAL_REGION);
