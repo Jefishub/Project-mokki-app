@@ -1,65 +1,40 @@
 
-import { Text, View } from '../components/Themed';
+import { View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, StatusBar, TextInput, Button, Alert } from 'react-native';
+import { StyleSheet, TextInput, Button, Alert } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import MapViewDirections from 'react-native-maps-directions';
 import CONFIG from '../config';
 
-const INITIAL_REGION = { latitude: 60.443346, longitude: 25.392492, latitudeDelta: 0.003, longitudeDelta: 0.002, };
+const INITIAL_REGION = { latitude: 60.443346, longitude: 25.392492, latitudeDelta: 0.30, longitudeDelta: 0.30, };
 const INITIAL_MARKER = { latitude: 60.443346, longitude: 25.392492 }
 // location chosen randomly from map, 07150 Pornainen
 
+type Selection = string | {latitude: number, longitude: number}
+
 export default function MapScreen({ navigation }: RootTabScreenProps<'TabThree'>) {
-    const [latLng, setLatLng] = useState(INITIAL_REGION);
-    const [marker, setMarker] = useState(INITIAL_MARKER);
-    const [locationAddress, setLocationAddress] = useState('Current Location');
+    const [locationAddress, setLocationAddress] = useState('Kirjoita osoite');
+    const [currentSelection, setCurrentSelection] = useState<Selection>('Helsinki');
+
 
     useEffect(() => {
-        (async () => {
-            const { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') {
-                Alert.alert('No permissionto get location');
-                return;
-            }
-            const location = await Location.getCurrentPositionAsync({});
-            setLatLng(
-                {
-                    latitude: location.coords.latitude,
-                    longitude: location.coords.longitude,
-                    latitudeDelta: 0.003,
-                    longitudeDelta: 0.002,
-                });
-            setMarker({
-                latitude: location.coords.latitude,
-                longitude: location.coords.longitude
-            })
-        })();
+        fetchCurrentLocation();
     }, []);
 
-    const fetchData = () => {
-        fetch(CONFIG.mapquest.mapquest_api_url + "?key=" + CONFIG.mapquest.mapquest_api_key + "&location=" + locationAddress, { method: 'GET' })
-            .then(res => res.json())
-            .then((resJson) => {
-                setLatLng(
-                    {
-                        latitude: resJson.results[0].locations[0].latLng.lat,
-                        longitude: resJson.results[0].locations[0].latLng.lng,
-                        latitudeDelta: 0.003,
-                        longitudeDelta: 0.002,
-                    }
-                );
-                setMarker({
-                    latitude: resJson.results[0].locations[0].latLng.lat,
-                    longitude: resJson.results[0].locations[0].latLng.lng
-                })
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+    const fetchCurrentLocation = async () => {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+            Alert.alert('No permissionto get location');
+            return;
+        }
+        const location = await Location.getCurrentPositionAsync({});
+        setCurrentSelection({
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude
+        })
     }
 
     return (
@@ -69,18 +44,18 @@ export default function MapScreen({ navigation }: RootTabScreenProps<'TabThree'>
                 onChangeText={setLocationAddress}
                 value={locationAddress}
             />
-            <View style={{ width: 200 }}>
+            <View style={{ width: 200, marginBottom: 16 }}>
                 <Button
-                    onPress={fetchData}
-                    title="Find Location"
+                    onPress={() => setCurrentSelection(locationAddress)}
+                    title="Näytä reittiohjeet"
                 />
             </View>
             <MapView initialRegion={INITIAL_REGION} style={styles.map}>
                 <Marker coordinate={INITIAL_MARKER} />
-                <Marker coordinate={marker} />
                 <MapViewDirections
-                    origin={INITIAL_MARKER}
-                    destination={marker}
+                    lineDashPattern={[0]}
+                    origin={currentSelection}
+                    destination={INITIAL_MARKER}
                     strokeWidth={3}
                     strokeColor='hotpink'
                     apikey={CONFIG.google.google_api_key}
@@ -92,7 +67,6 @@ export default function MapScreen({ navigation }: RootTabScreenProps<'TabThree'>
 
 const styles = StyleSheet.create({
     container: {
-        paddingTop: StatusBar.currentHeight,
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',

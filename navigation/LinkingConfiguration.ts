@@ -27,7 +27,12 @@ const linking: LinkingOptions<RootStackParamList> = {
           },
           TabThree: {
             screens: {
-              RaportitScreen: 'three',
+              MapScreen: 'three',
+            },
+          },
+          TabFour: {
+            screens: {
+              ExportScreen: 'four',
             },
           },
         },

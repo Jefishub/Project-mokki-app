@@ -3724,6 +3724,13 @@ expo-font@~10.0.3:
     expo-modules-core "~0.4.4"
     fontfaceobserver "^2.1.0"
 
+expo-intent-launcher@~10.0.3:
+  version "10.0.3"
+  resolved "https://registry.yarnpkg.com/expo-intent-launcher/-/expo-intent-launcher-10.0.3.tgz#dd9350119779d1843da60c02f1a3980ccc5e8316"
+  integrity sha512-nqHb0HuzASzIR19SXTc/t3hn1pt8vMCaqfXvtP4jEDg8D7DTHOvS+SuXmNV9RnUEO/RF/XY8rmi6tLaNrjgCCA==
+  dependencies:
+    expo-modules-core "~0.4.4"
+
 expo-json-utils@~0.2.0:
   version "0.2.0"
   resolved "https://registry.npmjs.org/expo-json-utils/-/expo-json-utils-0.2.0.tgz"
@@ -3789,6 +3796,13 @@ expo-modules-core@~0.4.4, expo-modules-core@~0.4.7, expo-modules-core@~0.4.8, ex
   dependencies:
     compare-versions "^3.4.0"
     invariant "^2.2.4"
+
+expo-print@~11.0.4:
+  version "11.0.4"
+  resolved "https://registry.yarnpkg.com/expo-print/-/expo-print-11.0.4.tgz#8d5096b543c130fe9d31993f1411d249db987610"
+  integrity sha512-iKFoEJavMdqNUs0mZoCp9GFC0pWEvRzi+vJS3Ufn/S3ITGMBE6FUSi7V1P7jT0leJjOD3ivreQUzWH8hiuJGvA==
+  dependencies:
+    expo-modules-core "~0.4.7"
 
 expo-splash-screen@~0.13.5:
   version "0.13.5"
@@ -6766,6 +6780,11 @@ react-native-date-picker@^4.1.3:
   resolved "https://registry.npmjs.org/react-native-date-picker/-/react-native-date-picker-4.1.3.tgz"
   integrity sha512-ct1SR9LqQ9qczdKV4K/fWuV9wOVrlENMc3GyvwASP+obNbRid09OOJ6YHXIGx3B6CzZ1dAbzF++Jtxuo85XW8A==
 
+react-native-file-viewer@^2.1.5:
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/react-native-file-viewer/-/react-native-file-viewer-2.1.5.tgz#cd4544f573108e79002b5c7e1ebfce4371885250"
+  integrity sha512-MGC6sx9jsqHdefhVQ6o0akdsPGpkXgiIbpygb2Sg4g4bh7v6K1cardLV1NwGB9A6u1yICOSDT/MOC//9Ez6EUg==
+
 react-native-gesture-handler@~1.10.2:
   version "1.10.3"
   resolved "https://registry.npmjs.org/react-native-gesture-handler/-/react-native-gesture-handler-1.10.3.tgz"
@@ -6776,6 +6795,11 @@ react-native-gesture-handler@~1.10.2:
     hoist-non-react-statics "^3.3.0"
     invariant "^2.2.4"
     prop-types "^15.7.2"
+
+react-native-html-to-pdf@^0.12.0:
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/react-native-html-to-pdf/-/react-native-html-to-pdf-0.12.0.tgz#2b467296f85c9c9783a7288b19722a7028dcbcb8"
+  integrity sha512-Yb5WO9SfF86s5Yv9PqXQ7fZDr9zZOJ+6jtweT9zFLraPNHWX7pSxe2dSkeg3cGiNrib65ZXGN6ksHymfYLFSSg==
 
 react-native-maps-directions@^1.8.0:
   version "1.8.0"
