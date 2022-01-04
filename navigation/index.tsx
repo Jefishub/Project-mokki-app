@@ -19,7 +19,6 @@ import RaportitScreen from '../screens/RaportitScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import MapScreen from '../screens/MapScreen';
-import ExportScreen from '../screens/ExportScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -114,28 +113,6 @@ function BottomTabNavigator() {
         options={({ navigation }: RootTabScreenProps<'TabThree'>) => ({
           title: 'Kartta',
           tabBarIcon: ({ color }) => <TabBarIcon name="map" color={color} />,
-          headerRight: () => (
-            <Pressable
-              onPress={() => navigation.navigate('Modal')}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}>
-              <FontAwesome
-                name="info-circle"
-                size={25}
-                color={Colors[colorScheme].text}
-                style={{ marginRight: 15 }}
-              />
-            </Pressable>
-          ),
-        })}
-      />
-      <BottomTab.Screen
-        name="TabFour"
-        component={ExportScreen}
-        options={({ navigation }: RootTabScreenProps<'TabFour'>) => ({
-          title: 'Export',
-          tabBarIcon: ({ color }) => <TabBarIcon name="file" color={color} />,
           headerRight: () => (
             <Pressable
               onPress={() => navigation.navigate('Modal')}
