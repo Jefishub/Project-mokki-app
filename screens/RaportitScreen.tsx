@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Button, FlatList, Alert, Dimensions } from 'react-native'
+import { StyleSheet, FlatList, Alert, Dimensions } from 'react-native'
 import { getDatabase, ref, onValue, update, remove } from "firebase/database";
 
 import { Text, View } from '../components/Themed';
@@ -9,6 +9,7 @@ import DateToString from '../utils/dateHelper';
 import { ReportSheet } from '../components/Reports';
 import FontAwesome from '@expo/vector-icons/build/FontAwesome';
 import CONFIG from '../config';
+import ExportPdf from '../components/PDFExport';
 
 interface Report {
   startDate: Date,
@@ -31,6 +32,12 @@ interface ReportFromFirebase {
   electricityLeave: string,
   waterLeave: string,
   info: string
+}
+
+type userData = {
+  nights: number,
+  electricity: number,
+  water: number
 }
 
 const firebaseApp = firebase.initializeApp(CONFIG.firebase.firebaseConfig)
@@ -126,6 +133,26 @@ export default function RaportitScreen({ navigation }: RootTabScreenProps<'TabOn
     )
   }
 
+  const dateDiff = (d1: Date, d2: Date) => {
+    var t2 = d2.getTime();
+    var t1 = d1.getTime();
+
+    return Math.floor((t2 - t1) / (24 * 3600 * 1000));
+  }
+
+
+  const ExportData = (item: ReportFromFirebase) => {
+    const startDate = new Date(item.startDate);
+    const endDate = new Date(item.endDate);
+    const nights = dateDiff(startDate, endDate);
+    const currentReport: userData = {
+      'nights': nights,
+      'electricity': Number(item.electricityLeave) - Number(item.electricityArrive),
+      'water': Number(item.waterLeave) - Number(item.waterArrive),
+    }
+    ExportPdf(currentReport)
+  }
+
   const listView = (item: ReportFromFirebase) => {
     const startDate = new Date(item.startDate);
     const endDate = new Date(item.endDate);
@@ -139,19 +166,27 @@ export default function RaportitScreen({ navigation }: RootTabScreenProps<'TabOn
       'waterLeave': item.waterLeave,
       'info': item.info
     }
+
     return (
       <View style={styles.containerReport}>
         <View style={styles.infoRow}>
           <Text numberOfLines={1} style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 3 }}>{item.reserver}</Text>
           <Text style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 4 }}>{DateToString(startDate)}</Text>
           <Text style={{ fontSize: 18, backgroundColor: '#a8dadc', flex: 4 }}>{DateToString(endDate)}</Text>
-          <View style={{ flex: 3, alignItems: 'center' }}>
+          <View style={{ flex: 3, alignItems: 'center', flexDirection: "row" }}>
             <FontAwesome
               onPress={() => showUpdateScreen(currentReport, item.id)}
               name="pencil"
               size={25}
               color={'#457b9d'}
-              style={{ marginRight: 15 }}
+              style={{ marginHorizontal: 6 }}
+            />
+            <FontAwesome
+              onPress={() => ExportData(item)}
+              name="save"
+              size={25}
+              color={'#457b9d'}
+              style={{ marginRight: 6 }}
             />
           </View>
         </View>

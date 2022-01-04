@@ -10,13 +10,24 @@ import MapViewDirections from 'react-native-maps-directions';
 import CONFIG from '../config';
 import ExportPdf from '../components/PDFExport';
 
+const mockData: userData = {
+    nights: 4,
+    electricity: 100,
+    water: 5
+}
+
+type userData = {
+    nights: number,
+    electricity: number,
+    water: number
+  }
+
 export default function ExportScreen({ navigation }: RootTabScreenProps<'TabFour'>) {
     
 
     return (
         <View style={styles.container}>
-            <Text>Export</Text>
-            <ExportPdf />
+            <Button title='Tee uusi lasku' onPress={() => ExportPdf(mockData)} />
         </View>
     )
 }
