@@ -7,7 +7,7 @@ import { StyleSheet, TextInput, Button, Alert } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import MapViewDirections from 'react-native-maps-directions';
-import CONFIG from '../config';
+import CONFIG from '../config/config';
 
 const INITIAL_REGION = { latitude: 60.443346, longitude: 25.392492, latitudeDelta: 0.30, longitudeDelta: 0.30, };
 const INITIAL_MARKER = { latitude: 60.443346, longitude: 25.392492 }

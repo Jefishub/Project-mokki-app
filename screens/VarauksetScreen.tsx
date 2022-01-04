@@ -8,7 +8,7 @@ import firebase from 'firebase/compat/app';
 import uuid from 'react-native-uuid';
 import DateToString from '../utils/dateHelper';
 import FontAwesome from '@expo/vector-icons/build/FontAwesome';
-import CONFIG from '../config';
+import CONFIG from '../config/config';
 
 interface Reservation {
   startDate: Date,

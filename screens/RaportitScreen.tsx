@@ -8,7 +8,7 @@ import firebase from 'firebase/compat/app';
 import DateToString from '../utils/dateHelper';
 import { ReportSheet } from '../components/Reports';
 import FontAwesome from '@expo/vector-icons/build/FontAwesome';
-import CONFIG from '../config';
+import CONFIG from '../config/config';
 import ExportPdf from '../components/PDFExport';
 
 interface Report {
