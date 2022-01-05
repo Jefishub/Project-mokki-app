@@ -1,7 +1,11 @@
 # Project-mokki-app (React Native – Expo-Project)
+School Project for Mobile Developement course
+
+Haaga-Helia University of Applied Sciences
+
 
 Mökki-app Teknologiat:
-
+---------------------------------------------
 
 EXPO
 https://docs.expo.dev/
